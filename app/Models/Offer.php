@@ -9,4 +9,11 @@ class Offer extends Model
 {
     use HasFactory;
     protected $primaryKey = 'offer_id';
+
+    protected $fillable = [
+        'key',
+        'adds_text',
+        'bid',
+        'comment',
+    ];
 }

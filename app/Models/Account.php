@@ -12,4 +12,16 @@ class Account extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    protected $fillable = [
+        'account_login',
+        'account_pwd',
+        'ssh_ip',
+        'ssh_port',
+        'ssh_login',
+        'ssh_pwd',
+        'city',
+        'zip',
+        'comment',
+    ];
 }

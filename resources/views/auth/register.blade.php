@@ -1,7 +1,8 @@
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
-            <a href="/">
+            <a href="/dashboard/register">
+                <p class="text-4xl">Register a user</p>
                 <!-- <x-application-logo class="w-20 h-20 fill-current text-gray-500" /> -->
                 <!-- <img src="/img/f.png" alt="Faust logo"> -->
             </a>
@@ -41,6 +42,7 @@
                     <option value="registrar">registrar</option>
                     <option value="superadmin">superadmin</option>
                     <option value="roller">roller</option>
+                    <option value="admin">Admin</option>
                 </select>
             </div>
 
@@ -71,10 +73,9 @@
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
+                <a class="text-sm text-gray-600 hover:text-gray-900 bg-white hover:bg-gray-100 text-gray-800 font-semibold py-1.5 px-6 border border-gray-400 rounded shadow" href="{{ route('dashboard.users') }}">
+                    {{ __('Back') }}
                 </a>
-
                 <x-button class="ml-4">
                     {{ __('Register') }}
                 </x-button>
@@ -82,3 +83,4 @@
         </form>
     </x-auth-card>
 </x-guest-layout>
+

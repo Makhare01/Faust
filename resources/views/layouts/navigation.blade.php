@@ -18,18 +18,26 @@
                     </x-nav-link>
                 </div>
 
+                @if (Auth::user()->hasRole('admin'))
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('dashboard.users')" :active="request()->routeIs('dashboard.users')" style="text-decoration: none">
+                            {{ __('All user') }}
+                        </x-nav-link>
+                    </div>
+
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('register')" :active="request()->routeIs('register')" style="text-decoration: none">
+                            {{ __('Register user') }}
+                        </x-nav-link>
+                    </div>
+                @endif
+
                 @if (Auth::user()->hasRole('roller'))
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-nav-link :href="route('dashboard.offers')" :active="request()->routeIs('dashboard.offers')" style="text-decoration: none">
                         {{ __('Roller Table') }}
                     </x-nav-link>
                 </div>
-
-                <!-- <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard.accounts')" :active="request()->routeIs('dashboard.accounts')" style="text-decoration: none">
-                        {{ __('Google Accounts Table') }}
-                    </x-nav-link>
-                </div> -->
 
                 @endif
 
@@ -96,10 +104,39 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" tyle="text-decoration: none !important;">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            @if (Auth::user()->hasRole('admin'))
+                <x-responsive-nav-link :href="route('dashboard.users')" :active="request()->routeIs('dashboard.users')" style="text-decoration: none">
+                    {{ __('All user') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('register')" :active="request()->routeIs('register')" style="text-decoration: none">
+                    {{ __('Register user') }}
+                </x-responsive-nav-link>
+            @endif
+
+            @if (Auth::user()->hasRole('roller'))
+                <x-responsive-nav-link :href="route('dashboard.offers')" :active="request()->routeIs('dashboard.offers')" style="text-decoration: none">
+                    {{ __('Roller Table') }}
+                </x-responsive-nav-link>
+            @endif
+
+            @if (Auth::user()->hasRole('superadmin'))
+                <x-responsive-nav-link :href="route('dashboard.offersList')" :active="request()->routeIs('dashboard.offersList')" style="text-decoration: none">
+                    {{ __('Offers Table') }}
+                </x-responsive-nav-link>
+            @endif
+
+            @if (Auth::user()->hasRole('registrar'))
+                <x-responsive-nav-link :href="route('dashboard.accountsList')" :active="request()->routeIs('dashboard.accountsList')" style="text-decoration: none">
+                    {{ __('Accounts Table') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
+
+        
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
@@ -112,7 +149,7 @@
 
                 <div class="ml-3">
                     <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                    <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                    <!-- <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div> -->
                 </div>
             </div>
 
@@ -123,7 +160,7 @@
 
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
-                                        this.closest('form').submit();">
+                                        this.closest('form').submit();" style="text-decoration: none !important;">
                         {{ __('Log out') }}
                     </x-responsive-nav-link>
                 </form>
