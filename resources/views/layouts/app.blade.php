@@ -342,6 +342,22 @@
                 modal.style.display = "none";
             }
 
+            // User Delete modal
+            function modalUserDelete(id) {
+                var modal = document.getElementById("myModalUserDelete" + id);
+                modal.style.display = "block";
+            }
+
+            function closeUserDeleteModalX(id) {
+                var modal = document.getElementById("myModalUserDelete" + id);
+                modal.style.display = "none";
+            }
+
+            function closeUserDeleteModal(id) {
+                var modal = document.getElementById("myModalUserDelete" + id);
+                modal.style.display = "none";
+            }
+
             // Checkbox
             function checkBox() {
                 var checkBox = document.getElementById("account_numbercheck");
