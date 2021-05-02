@@ -1,160 +1,256 @@
-/******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ({
+function myTrim(x) {
+    return x.replace(/^\s+|\s+$/gm, "");
+}
 
-/***/ "./resources/css/app.css":
-/*!*******************************!*\
-  !*** ./resources/css/app.css ***!
-  \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+function Clear() {
+    document.getElementById("choosenAccount").value = "";
+    document.getElementById("account_id").value = null;
+    document.getElementById("choosenOffer").value = "";
+    document.getElementById("offer_id").value = null;
+}
 
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
+function addAccount(id) {
+    var account = document.getElementById("account" + id).textContent;
+    document.getElementById("choosenAccount").value = myTrim(account);
+    var accountId = document.getElementById("accountId" + id).textContent;
+    document.getElementById("account_id").value = parseInt(accountId);
+}
 
+function addOffer(id) {
+    var offer = document.getElementById("offer" + id).textContent;
+    document.getElementById("choosenOffer").value = offer;
+    var offerId = document.getElementById("offerId" + id).textContent;
+    document.getElementById("offer_id").value = parseInt(offerId);
+}
 
-/***/ })
+// Account modal
 
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = __webpack_modules__;
-/******/ 	
-/******/ 	// the startup function
-/******/ 	// It's empty as some runtime module handles the default behavior
-/******/ 	__webpack_require__.x = x => {};
-/************************************************************************/
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/jsonp chunk loading */
-/******/ 	(() => {
-/******/ 		// no baseURI
-/******/ 		
-/******/ 		// object to store loaded and loading chunks
-/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// Promise = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = {
-/******/ 			"/js/main": 0
-/******/ 		};
-/******/ 		
-/******/ 		var deferredModules = [
-/******/ 			["./resources/css/app.css"]
-/******/ 		];
-/******/ 		// no chunk on demand loading
-/******/ 		
-/******/ 		// no prefetching
-/******/ 		
-/******/ 		// no preloaded
-/******/ 		
-/******/ 		// no HMR
-/******/ 		
-/******/ 		// no HMR manifest
-/******/ 		
-/******/ 		var checkDeferredModules = x => {};
-/******/ 		
-/******/ 		// install a JSONP callback for chunk loading
-/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
-/******/ 			var [chunkIds, moreModules, runtime, executeModules] = data;
-/******/ 			// add "moreModules" to the modules object,
-/******/ 			// then flag all "chunkIds" as loaded and fire callback
-/******/ 			var moduleId, chunkId, i = 0, resolves = [];
-/******/ 			for(;i < chunkIds.length; i++) {
-/******/ 				chunkId = chunkIds[i];
-/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 					resolves.push(installedChunks[chunkId][0]);
-/******/ 				}
-/******/ 				installedChunks[chunkId] = 0;
-/******/ 			}
-/******/ 			for(moduleId in moreModules) {
-/******/ 				if(__webpack_require__.o(moreModules, moduleId)) {
-/******/ 					__webpack_require__.m[moduleId] = moreModules[moduleId];
-/******/ 				}
-/******/ 			}
-/******/ 			if(runtime) runtime(__webpack_require__);
-/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
-/******/ 			while(resolves.length) {
-/******/ 				resolves.shift()();
-/******/ 			}
-/******/ 		
-/******/ 			// add entry modules from loaded chunk to deferred list
-/******/ 			if(executeModules) deferredModules.push.apply(deferredModules, executeModules);
-/******/ 		
-/******/ 			// run deferred modules when all chunks ready
-/******/ 			return checkDeferredModules();
-/******/ 		}
-/******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunk"] = self["webpackChunk"] || [];
-/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
-/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
-/******/ 		
-/******/ 		function checkDeferredModulesImpl() {
-/******/ 			var result;
-/******/ 			for(var i = 0; i < deferredModules.length; i++) {
-/******/ 				var deferredModule = deferredModules[i];
-/******/ 				var fulfilled = true;
-/******/ 				for(var j = 1; j < deferredModule.length; j++) {
-/******/ 					var depId = deferredModule[j];
-/******/ 					if(installedChunks[depId] !== 0) fulfilled = false;
-/******/ 				}
-/******/ 				if(fulfilled) {
-/******/ 					deferredModules.splice(i--, 1);
-/******/ 					result = __webpack_require__(__webpack_require__.s = deferredModule[0]);
-/******/ 				}
-/******/ 			}
-/******/ 			if(deferredModules.length === 0) {
-/******/ 				__webpack_require__.x();
-/******/ 				__webpack_require__.x = x => {};
-/******/ 			}
-/******/ 			return result;
-/******/ 		}
-/******/ 		var startup = __webpack_require__.x;
-/******/ 		__webpack_require__.x = () => {
-/******/ 			// reset startup function so it can be called again when more startup code is added
-/******/ 			__webpack_require__.x = startup || (x => {});
-/******/ 			return (checkDeferredModules = checkDeferredModulesImpl)();
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/************************************************************************/
-/******/ 	
-/******/ 	// run startup
-/******/ 	var __webpack_exports__ = __webpack_require__.x();
-/******/ 	
-/******/ })()
-;
+function modalAccount(id) {
+    var modal = document.getElementById("myModalAc" + id);
+    modal.style.display = "block";
+}
+
+function closeAccountModal(id) {
+    var modal = document.getElementById("myModalAc" + id);
+    modal.style.display = "none";
+}
+
+function closeModal(id) {
+    var modal = document.getElementById("myModalAc" + id);
+    modal.style.display = "none";
+}
+
+function enableStateEdit(id) {
+    var disable = document.getElementById("state" + id);
+    disable.style.pointerEvents = "all";
+    disable.style.background = "#FFFFFF";
+}
+
+function enableState() {
+    var disable = document.getElementById("state");
+    disable.style.pointerEvents = "all";
+    disable.style.background = "#FFFFFF";
+}
+// Delete modal
+function modalDelete(id) {
+    var modal = document.getElementById("myModalDelete" + id);
+    modal.style.display = "block";
+}
+
+function closeDeleteModalX(id) {
+    var modal = document.getElementById("myModalDelete" + id);
+    modal.style.display = "none";
+}
+
+function closeDeleteModal(id) {
+    var modal = document.getElementById("myModalDelete" + id);
+    modal.style.display = "none";
+}
+
+// Ready modal
+function modalReady(id) {
+    var modal = document.getElementById("myModalReady" + id);
+    modal.style.display = "block";
+}
+
+function closeReadyModalX(id) {
+    var modal = document.getElementById("myModalReady" + id);
+    modal.style.display = "none";
+}
+
+function closeReadyModal(id) {
+    var modal = document.getElementById("myModalReady" + id);
+    modal.style.display = "none";
+}
+
+// Offer modal
+
+function modal(id) {
+    var modal = document.getElementById("myModal" + id);
+    modal.style.display = "block";
+}
+
+function closeModalO(id) {
+    var modal = document.getElementById("myModal" + id);
+    modal.style.display = "none";
+}
+
+function closeM(id) {
+    var modal = document.getElementById("myModal" + id);
+    modal.style.display = "none";
+}
+
+// Roller work modal
+function modalCaseWork(id) {
+    var modal = document.getElementById("myModalCaseWork" + id);
+    modal.style.display = "block";
+}
+
+function closeCaseWorkModalX(id) {
+    var modal = document.getElementById("myModalCaseWork" + id);
+    modal.style.display = "none";
+}
+
+function closeCaseWorkModal(id) {
+    var modal = document.getElementById("myModalCaseWork" + id);
+    modal.style.display = "none";
+}
+
+// Roller review modal
+function modalReview(id) {
+    var modal = document.getElementById("myModalReview" + id);
+    modal.style.display = "block";
+}
+
+function closeReviewModalX(id) {
+    var modal = document.getElementById("myModalReview" + id);
+    modal.style.display = "none";
+}
+
+function closeReviewModal(id) {
+    var modal = document.getElementById("myModalReview" + id);
+    modal.style.display = "none";
+}
+
+// Roller billing modal
+function modalBilling(id) {
+    var modal = document.getElementById("myModalBilling" + id);
+    modal.style.display = "block";
+}
+
+function closeBillingModalX(id) {
+    var modal = document.getElementById("myModalBilling" + id);
+    modal.style.display = "none";
+}
+
+function closeBillingModal(id) {
+    var modal = document.getElementById("myModalBilling" + id);
+    modal.style.display = "none";
+}
+
+// Suspend modal
+function modalSuspend(id) {
+    var modal = document.getElementById("myModalSuspend" + id);
+    modal.style.display = "block";
+}
+
+function closeSuspendModalX(id) {
+    var modal = document.getElementById("myModalSuspend" + id);
+    modal.style.display = "none";
+}
+
+function closeSuspendModal(id) {
+    var modal = document.getElementById("myModalSuspend" + id);
+    modal.style.display = "none";
+}
+
+// Superadmin Delete modal
+function modalSupDelete(id) {
+    var modal = document.getElementById("myModalSupDelete" + id);
+    modal.style.display = "block";
+}
+
+function closeSupDeleteModalX(id) {
+    var modal = document.getElementById("myModalSupDelete" + id);
+    modal.style.display = "none";
+}
+
+function closeSupDeleteModal(id) {
+    var modal = document.getElementById("myModalSupDelete" + id);
+    modal.style.display = "none";
+}
+
+// Superadmin Work modal
+function modalSupWork(id) {
+    var modal = document.getElementById("myModalSupWork" + id);
+    modal.style.display = "block";
+}
+
+function closeSupWorkModalX(id) {
+    var modal = document.getElementById("myModalSupWork" + id);
+    modal.style.display = "none";
+}
+
+function closeSupWorkModal(id) {
+    var modal = document.getElementById("myModalSupWork" + id);
+    modal.style.display = "none";
+}
+
+// Superadmin Valid modal
+function modalSupValid(id) {
+    var modal = document.getElementById("myModalSupValid" + id);
+    modal.style.display = "block";
+}
+
+function closeSupValidModalX(id) {
+    var modal = document.getElementById("myModalSupValid" + id);
+    modal.style.display = "none";
+}
+
+function closeSupValidModal(id) {
+    var modal = document.getElementById("myModalSupValid" + id);
+    modal.style.display = "none";
+}
+
+// User Delete modal
+function modalUserDelete(id) {
+    var modal = document.getElementById("myModalUserDelete" + id);
+    modal.style.display = "block";
+}
+
+function closeUserDeleteModalX(id) {
+    var modal = document.getElementById("myModalUserDelete" + id);
+    modal.style.display = "none";
+}
+
+function closeUserDeleteModal(id) {
+    var modal = document.getElementById("myModalUserDelete" + id);
+    modal.style.display = "none";
+}
+
+// Checkbox
+function checkBox() {
+    var checkBox = document.getElementById("account_numbercheck");
+    var text = document.getElementById("account_number");
+    if (checkBox.checked == true) {
+        text.style.pointerEvents = "All";
+        text.style.background = "#FFFFFF";
+    } else {
+        text.style.pointerEvents = "none";
+        text.style.background = "#EFF1F3";
+    }
+}
+
+// Edit Checkbox
+function checkBoxEdit(id) {
+    var checkBox = document.getElementById(id);
+    var text = document.getElementById("account_" + id);
+    if (checkBox.checked == true) {
+        text.style.pointerEvents = "All";
+        text.style.background = "#FFFFFF";
+        // text.style.border = "solid 1px red";
+    } else {
+        text.style.pointerEvents = "none";
+        text.style.background = "#EFF1F3";
+    }
+}

@@ -1,0 +1,77 @@
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.addModel {
+    /* width: 1000px !important; */
+}
+table {
+    border: solid 1px black !important;
+}
+th,
+td {
+    border-right: solid 1px black !important;
+}
+.account-table thead tr th,
+.account-table tbody tr td {
+    font-size: 10px !important;
+}
+.edit-label {
+    font-size: 18px;
+}
+/* The Modal (background) */
+.modalnew {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 2%; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0); /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.8); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-contentnew {
+    background-color: #fefefe;
+    margin: auto;
+    border: 1px solid #888;
+    width: 100% !important;
+    max-width: 520px !important;
+    border-radius: 7px !important;
+}
+
+.Comment {
+    width: 100% !important;
+    max-width: 100px !important;
+    overflow: auto !important;
+}
+.Comment::-webkit-scrollbar {
+    height: 5px;
+}
+
+@media only screen and (max-width: 1000px) {
+    .rollerModalTables {
+        display: block !important;
+    }
+    .rollerModalTablesDiv {
+        width: 100% !important;
+    }
+    .rollerModalTablesDiv1 {
+        width: 100% !important;
+        margin-top: 20px !important;
+    }
+}

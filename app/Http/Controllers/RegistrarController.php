@@ -71,6 +71,8 @@ class RegistrarController extends Controller
             'country' => $country,
             'userShortNames' => $userShortNames,
             'createdDates' => $createdDates,
+            'allCountries' => $allCountries,
+            'allStates' => $allStates,
         ]);
     }
 
