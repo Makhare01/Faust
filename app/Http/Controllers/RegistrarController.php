@@ -71,7 +71,7 @@ class RegistrarController extends Controller
             'country' => $country,
             'userShortNames' => $userShortNames,
             'createdDates' => $createdDates,
-            'allCountries' => $allCountries,
+            // 'allCountries' => $allCountries,
             'allStates' => $allStates,
         ]);
     }
@@ -106,13 +106,13 @@ class RegistrarController extends Controller
             'country_code' => ['required', 'string', 'max:255'],
             'account_login' => ['required'],
             'account_pwd' => ['required', 'string'],
-            'ssh_ip' => ['required', 'ipv4'],
-            'ssh_port' => ['required', 'numeric'],
-            'ssh_login' => ['required', 'string'],
-            'ssh_pwd' => ['required', 'string'],
+            'ssh_ip' => ['ipv4'],
+            'ssh_port' => ['numeric'],
+            'ssh_login' => ['string'],
+            'ssh_pwd' => ['string'],
             'city' => ['required', 'string', 'max:255'],
             'zip' => ['required', 'string', 'max:255'],
-            'state' => ['string', 'max:255'],
+            'state' => ['string', 'max:100', "nullable"],
             'comment' => ['string', "nullable"],
         ]);
 
@@ -120,20 +120,26 @@ class RegistrarController extends Controller
 
         if(request('account_number') === '' || request('account_number') === null) $account->account_number = $Acc_number;
         else $account->account_number = request('account_number');
+        
         $account->account_type = $data['account_type'];
         $account->country_code = $data['country_code']; 
         $account->account_login = $data['account_login']; 
         $account->account_pwd = $data['account_pwd'];
-        $account->ssh_ip = $data['ssh_ip'];
-        $account->ssh_port = $data['ssh_port'];
-        $account->ssh_login = $data['ssh_login'];
-        $account->ssh_pwd = $data['ssh_pwd'];
+
+        if(!array_key_exists("ssh_ip",$data)) $data['ssh_ip'] = null;
+
+        if(!array_key_exists("ssh_port",$data)) $data['ssh_port'] = null;
+
+        if(!array_key_exists("ssh_login",$data)) $data['ssh_login'] = null;
+
+        if(!array_key_exists('ssh_pwd',$data)) $data['ssh_pwd'] = null;
+
         $account->country = $data['country_code'];
         $account->city = $data['city'];
         $account->zip = $data['zip'];
-        if($data['country_code'] == 'United States of America') {
-            $account->state = $data['state'];
-        }else $account->state = 'N/A';
+        if($data['state'] == null) $account->state = 'N/A';
+        else $account->state = $data['state'];
+        
         $account->comment = $data['comment'];
         $account->user_created_id = Auth::user()->id;
 
@@ -179,17 +185,23 @@ class RegistrarController extends Controller
             'country_code' => ['required', 'string', 'max:255'],
             'account_login' => ['required'],
             'account_pwd' => ['required', 'string'],
-            'ssh_ip' => ['required', 'ipv4'],
-            'ssh_port' => ['required', 'numeric'],
-            'ssh_login' => ['required', 'string'],
-            'ssh_pwd' => ['required', 'string'],
+            'ssh_ip' => ['ipv4'],
+            'ssh_port' => ['numeric'],
+            'ssh_login' => ['string'],
+            'ssh_pwd' => ['string'],
             'city' => ['required', 'string', 'max:255'],
             'zip' => ['required', 'string', 'max:255'],
             'state' => ['string', 'max:255'],
             'comment' => ['string', "nullable"],
         ]);
 
-        if(request("account_number") != null) $Acc_number = request("account_number");
+        if(!array_key_exists("ssh_ip",$data)) $data['ssh_ip'] = null;
+
+        if(!array_key_exists("ssh_port",$data)) $data['ssh_port'] = null;
+
+        if(!array_key_exists("ssh_login",$data)) $data['ssh_login'] = null;
+
+        if(!array_key_exists('ssh_pwd',$data)) $data['ssh_pwd'] = null;
 
         Account::where("id", $id)->update([
             "account_number" => $Acc_number,

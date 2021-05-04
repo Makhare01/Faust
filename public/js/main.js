@@ -23,6 +23,50 @@ function addOffer(id) {
     document.getElementById("offer_id").value = parseInt(offerId);
 }
 
+// Proxy SSH radio burrons
+
+function proxy() {
+    let proxy = document.getElementById("proxy");
+
+    let ssh_ip = document.getElementById("ssh_ip");
+    let ssh_port = document.getElementById("ssh_port");
+    let ssh_login = document.getElementById("ssh_login");
+    let ssh_pwd = document.getElementById("ssh_pwd");
+
+    if (proxy.checked == true) {
+        ssh_ip.disabled = true;
+        ssh_ip.value = null;
+
+        ssh_port.disabled = true;
+        ssh_port.value = null;
+
+        ssh_login.disabled = true;
+        ssh_login.value = null;
+
+        ssh_pwd.disabled = true;
+        ssh_pwd.value = null;
+    }
+}
+
+function ssh() {
+    let ssh = document.getElementById("ssh");
+
+    let ssh_ip = document.getElementById("ssh_ip");
+    let ssh_port = document.getElementById("ssh_port");
+    let ssh_login = document.getElementById("ssh_login");
+    let ssh_pwd = document.getElementById("ssh_pwd");
+
+    if (ssh.checked == true) {
+        ssh_ip.disabled = false;
+
+        ssh_port.disabled = false;
+
+        ssh_login.disabled = false;
+
+        ssh_pwd.disabled = false;
+    }
+}
+
 // Account modal
 
 function modalAccount(id) {
@@ -40,17 +84,47 @@ function closeModal(id) {
     modal.style.display = "none";
 }
 
-function enableStateEdit(id) {
-    var disable = document.getElementById("state" + id);
-    disable.style.pointerEvents = "all";
-    disable.style.background = "#FFFFFF";
+// function enableStateEdit(id) {
+//     var disable = document.getElementById("state" + id);
+//     disable.style.pointerEvents = "all";
+//     disable.style.background = "#FFFFFF";
+// }
+
+function enableStateFunc() {
+    var selectBox = document.getElementById("country_code");
+    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+    var disable = document.getElementById("state");
+
+    if (selectedValue == "United States of America") {
+        disable.style.pointerEvents = "all";
+        disable.style.background = "#FFFFFF";
+    } else {
+        disable.style.pointerEvents = "none";
+        disable.style.background = "#EFF1F3";
+        disable.value = "N/A";
+    }
 }
 
-function enableState() {
-    var disable = document.getElementById("state");
-    disable.style.pointerEvents = "all";
-    disable.style.background = "#FFFFFF";
+function enableEditStateFunc(id) {
+    var selectBox = document.getElementById("edit_country_code" + id);
+    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+    var disable = document.getElementById("state" + id);
+    var selected = document.getElementById("selected" + id);
+
+    if (selectedValue == "United States of America") {
+        selected.value = "N/A";
+        selected.textContent = "N/A";
+        disable.style.pointerEvents = "all";
+        disable.style.background = "#FFFFFF";
+    } else {
+        selected.value = "N/A";
+        selected.textContent = "N/A";
+        disable.value = "N/A";
+        disable.style.pointerEvents = "none";
+        disable.style.background = "#EFF1F3";
+    }
 }
+
 // Delete modal
 function modalDelete(id) {
     var modal = document.getElementById("myModalDelete" + id);

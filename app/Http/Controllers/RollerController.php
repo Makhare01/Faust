@@ -63,7 +63,7 @@ class RollerController extends Controller
 
         $index = 0;
 
-        return view('offers', [
+        return view('rollerCase', [
             'offers' => $offers,
             'accounts' => $accounts,
             'accountOffers' => $accountOffers,

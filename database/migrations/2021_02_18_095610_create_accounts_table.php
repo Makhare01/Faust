@@ -26,6 +26,7 @@ class CreateAccountsTable extends Migration
             $table->float('ssh_port');
             $table->string('ssh_login');
             $table->string('ssh_pwd');
+            
             $table->string('country');
             $table->string('city');
             $table->string('zip');
