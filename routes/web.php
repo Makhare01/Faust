@@ -53,7 +53,8 @@ Route::group(['middleware' => ['auth', 'role:registrar']], function() {
     Route::get('/dashboard/accountsList', 'App\Http\Controllers\RegistrarController@accountsList')->name('dashboard.accountsList');
     Route::post('/dashboard/accountsList', 'App\Http\Controllers\RegistrarController@addAccount')->name('dashboard.accountsListPost'); 
     Route::delete('/dashboard/accountsList/{id}', 'App\Http\Controllers\RegistrarController@accountDestroy')->name('dashboard.accountDestroy');
-    Route::put('/dashboard/accountsList/{id1}', 'App\Http\Controllers\RegistrarController@accountStatus')->name('dashboard.accountStatus');
+    Route::put('/dashboard/accountsList', 'App\Http\Controllers\RegistrarController@numberOfRows')->name('dashboard.numberOfRows');
+    Route::put('/dashboard/accountsList/{id}', 'App\Http\Controllers\RegistrarController@accountStatus')->name('dashboard.accountStatus');
     Route::patch('/dashboard/accountsList/{id}', 'App\Http\Controllers\RegistrarController@accountEdit')->name('dashboard.accountEdit');
 });
 

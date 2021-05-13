@@ -1,8 +1,97 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('All user') }}
-        </h2>
+        <div style="display: flex;">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight" style="line-height: 42px; height: 42px; margin: 0px;">
+                {{ __('All user') }}
+            </h2>
+
+            <div class="space-x-8 sm:-my-px sm:ml-10 sm:flex" style="margin-left: auto;">
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Add
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add New User</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                            <form method="POST" action="{{ route('register') }}" id="add_user_form">
+                                @csrf
+
+                                <!-- First Name -->
+                                <div class="mt-4">
+                                    <x-label for="first_name" :value="__('First name')" />
+
+                                    <x-input id="first_name" class="block mt-1 w-full" type="text" name="first_name" :value="old('first_name')" required autofocus />
+                                </div>
+
+                                <!-- Last Name -->
+                                <div class="mt-4">
+                                    <x-label for="last_name" :value="__('Last name')" />
+
+                                    <x-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name')" required autofocus />
+                                </div>
+
+                                <!-- Name -->
+                                <div class="mt-4">
+                                    <x-label for="name" :value="__('Name')" />
+
+                                    <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+                                </div>
+
+                                <!-- Select Option Rol type -->
+                                <div class="mt-4">
+                                    <x-label for="role_id" value="{{ __('Role') }}" />
+                                    <select name="role_id" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                                        <option value="registrar">registrar</option>
+                                        <option value="superadmin">superadmin</option>
+                                        <option value="roller">roller</option>
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+
+                                <!-- Email Address
+                                <div class="mt-4">
+                                    <x-label for="email" :value="__('Email')" />
+
+                                    <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+                                </div> -->
+
+                                <!-- Password -->
+                                <div class="mt-4">
+                                    <x-label for="password" :value="__('Password')" />
+
+                                    <x-input id="password" class="block mt-1 w-full"
+                                                    type="password"
+                                                    name="password"
+                                                    required autocomplete="new-password" />
+                                </div>
+
+                                <!-- Confirm Password -->
+                                <div class="mt-4">
+                                    <x-label for="password_confirmation" :value="__('Confirm Password')" />
+
+                                    <x-input id="password_confirmation" class="block mt-1 w-full"
+                                                    type="password"
+                                                    name="password_confirmation" required />
+                                </div>
+                            </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-outline-success" form="add_user_form">Register</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </x-slot>
 
     <div class="py-12">

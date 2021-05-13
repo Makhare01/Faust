@@ -15,14 +15,65 @@ use App\Models\Suspend;
 class RegistrarController extends Controller
 {
     //Registrar functions
+    public function numberOfRows() {;
+        Account::where("user_created_id", Auth::user()->id)->update([
+            "rows" => request('pages'),
+        ]);
 
-    public function accountsList() {
+        return redirect('/dashboard/accountsList');
+    }
+    // public function search(Request $request) {
+    //     // Get the search value from the request
+    //     $search = $request->input('search');
+
+    //     $accounts = Account::query()
+    //         ->where('country', 'LIKE', "%{$search}%")
+    //         ->orWhere('comment', 'LIKE', "%{$search}%")
+    //         ->get();
+
+    //     return view("registrarAccounts", compact('accounts'));
+    // }
+
+    public function accountsList(Request $request) {
         include(app_path() . '/functions/converter.php');
 
+        // SEARCH
+        // Get the search value from the request
+        // $search = $request->input('search');
+
+        // $searched_accounts = Account::where('country', 'LIKE', "%{$search}%")
+        //     ->orWhere('comment', 'LIKE', "%{$search}%")
+        //     ->get();
+
         $accounts = Account::all();
+        // $accounts = Account::where("user_created_id", 2)->paginate(6);
+
         $users = User::all();
+        $usersForPagination = User::where('role_id', 'registrar')->get();
+
         $date = Account::select('created_at')->get();
         $countryArr = Account::pluck('country_code');
+
+        // $accountsArr = [];
+        // foreach($usersForPagination as $key => $user):
+        //     $accountsArr[$user->id] = Account::where("user_created_id", $user->id)->paginate($paginate_row);
+        // endforeach;
+
+        $rows = Account::pluck('rows','user_created_id');
+        // dd($rows);
+        $row = [];
+        foreach($rows as $key => $value) {
+            $row[$key] = $value;
+        }
+        
+        if(array_key_exists(Auth::user()->id, $row))  
+        $auth_user_row = $row[Auth::user()->id];
+        else $auth_user_row = 5;
+
+        if(array_key_exists(Auth::user()->id, $row)) $paginate_row = $row[Auth::user()->id];
+        else $paginate_row = 5;
+
+        $auth_user_accounts = Account::where('user_created_id', Auth::user()->id)->paginate($paginate_row);
 
         if(Account::select('created_at')->exists()){
             foreach($date as $key => $value) {
@@ -63,9 +114,9 @@ class RegistrarController extends Controller
                 $createdDates[] = $TMP;
             }
         }
-
+        // 'accounts' => $accounts,
         return view('registrarAccounts', [
-            'accounts' => $accounts,
+            // 'searched_accounts' => $searched_accounts,
             'users' => $users,
             'dates' => $dates,
             'country' => $country,
@@ -73,14 +124,23 @@ class RegistrarController extends Controller
             'createdDates' => $createdDates,
             // 'allCountries' => $allCountries,
             'allStates' => $allStates,
+            // 'accountsArr' => $accountsArr,
+            'auth_user_accounts' => $auth_user_accounts,
+            'auth_user_row' => $auth_user_row,
         ]);
     }
 
     public function addAccount() {
         $account = new Account(); // create Account model
-
+        if(Account::where('user_created_id', Auth::user()->id)->exists()) {
+            $tmp = Account::where('user_created_id', Auth::user()->id)->first(); //table rows for auth user
+            $add_rows = $tmp->rows;
+        } else $add_rows = 25;
+        
+        
         $date = Account::select('created_at')->get();
         $countryArr = Account::pluck('country_code');
+        $AccountNumbers = Account::pluck('account_number');
 
         $mydate = getdate(date("U"));
         $currentDate = intval($mydate['mday'] . $mydate['mon'] . $mydate['year']); //Current date
@@ -116,11 +176,7 @@ class RegistrarController extends Controller
             'comment' => ['string', "nullable"],
         ]);
 
-        // dd($data);
-
-        if(request('account_number') === '' || request('account_number') === null) $account->account_number = $Acc_number;
-        else $account->account_number = request('account_number');
-        
+        $account->account_number = $Acc_number;
         $account->account_type = $data['account_type'];
         $account->country_code = $data['country_code']; 
         $account->account_login = $data['account_login']; 
@@ -139,14 +195,14 @@ class RegistrarController extends Controller
         $account->zip = $data['zip'];
         if($data['state'] == null) $account->state = 'N/A';
         else $account->state = $data['state'];
-        
         $account->comment = $data['comment'];
         $account->user_created_id = Auth::user()->id;
-
+        $account->rows = $add_rows;
         $account->save(); // save to database
 
         return redirect('/dashboard/accountsList');
     }
+
 
     public function accountDestroy($id) {
         $account = Account::findOrFail($id);
@@ -156,6 +212,9 @@ class RegistrarController extends Controller
     }
 
     public function accountEdit($id) {
+        if(Account::where('user_created_id', Auth::user()->id)->exists()) {
+            $add_rows = Account::where('user_created_id', Auth::user()->id)->first(); //table rows for auth user
+        } else $add_rows = 25;
 
         $date = Account::select('created_at')->get();
         $countryArr = Account::pluck('country_code');
@@ -218,12 +277,13 @@ class RegistrarController extends Controller
             "zip" => $data['zip'],
             "state" => $data['state'],
             "comment" => $data['comment'],
+            'rows' => $add_rows->rows,
         ]);
 
         return redirect('/dashboard/accountsList');
     }
 
-    public function accountStatus($id1) {
+    public function accountStatus($id) {
         Account::where("id", $id1)->update([
             "status" => 'ready',
             "company_created_date" => Carbon::now()->toDateTimeString(),

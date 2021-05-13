@@ -27,7 +27,7 @@ td {
     font-size: 10px !important;
 }
 .edit-label {
-    font-size: 18px;
+    font-size: 16px;
 }
 /* The Modal (background) */
 .modalnew {
@@ -78,4 +78,9 @@ td {
         width: 100% !important;
         margin-top: 20px !important;
     }
+}
+
+.rows-label {
+    font-size: 14pt;
+    font-weight: bold;
 }

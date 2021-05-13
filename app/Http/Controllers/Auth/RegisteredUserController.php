@@ -62,6 +62,7 @@ class RegisteredUserController extends Controller
         $user->attachRole($request->role_id); 
         event(new Registered($user));
 
-        return redirect(RouteServiceProvider::HOME);
+        // return redirect(RouteServiceProvider::HOME);
+        return redirect('/dashboard/users');
     }
 }

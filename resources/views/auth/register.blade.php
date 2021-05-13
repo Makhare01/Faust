@@ -1,7 +1,7 @@
 <x-guest-layout>
     <x-auth-card>
         <x-slot name="logo">
-            <a href="/dashboard/register">
+            <a href="/dashboard/users">
                 <p class="text-4xl">Register a user</p>
                 <!-- <x-application-logo class="w-20 h-20 fill-current text-gray-500" /> -->
                 <!-- <img src="/img/f.png" alt="Faust logo"> -->

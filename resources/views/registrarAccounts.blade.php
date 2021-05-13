@@ -22,7 +22,7 @@
                     </div>
                     <div class="modal-body">
                         <!-- Add offer -->
-                        <form action="{{ route('dashboard.accountsListPost') }}" method="POST">
+                        <form id="add-account-form" action="{{ route('dashboard.accountsListPost') }}" method="POST">
                             @csrf
 
                             <div class="mb-3 pb-2 new-checklist">
@@ -37,15 +37,9 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="account_number" class="form-label">Account Number</label> <input type="checkbox" class="ml-3 mt-1" id="account_numbercheck" name="account_numbercheck" onclick="checkBox()">
-                                <input style="pointer-events: none; background: #EFF1F3;" type="number" class="form-control" id="account_number" name="account_number" placeholder="automatically" value="automatically">
-                                <p style="color: red;"> @error('account_number') {{ $message }} @enderror </p>
-                            </div>
-
-                            <div class="mb-3">
                                 <label for="account_type" class="form-label">Account Type</label>
-                                <select class="form-select" id="account_type" name="account_type">
-                                    <option value="Select Account Status">Select Account Status</option>
+                                <select class="form-select" id="account_type" name="account_type" required>
+                                    <option value="" selected disabled>Select Account Status</option>
                                     <option value="L">L</option>
                                     <option value="S">S</option>
                                 </select>
@@ -125,11 +119,10 @@
                                 <textarea class="form-control" id="comment" name="comment"></textarea>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Add</button>
-
                         </form>
                     </div>
                     <div class="modal-footer">
+                        <button type="submit" class="btn btn-outline-primary" form="add-account-form">Add</button>
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                         <!-- <button type="button" class="btn btn-outline-success">Save changes</button> -->
                     </div>
@@ -175,9 +168,26 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($accounts as $key => $account)
+                                
+                            <form action="{{ route('dashboard.numberOfRows') }}" method="POST">
+                                @csrf
+                                @method('PUT')
+                                <div style="display: flex;">
+                                    <label for="Pages" class="rows-label mr-4" style="line-height: 38px !important;">Nomber of rows:</label>
+                                    <select id="pages" class="form-select" name="pages" onchange="this.form.submit()" style="width: 80px;">
+                                        <option class="testtest" value="{{ $auth_user_row }}" selected>{{ $auth_user_row }}</option>
+                                        <option value="5">5</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="70">70</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                </div>
+                                
+                            </form>
+                               
+                            @foreach($auth_user_accounts as $key => $account)
                                 @if($account->status == 'in progress')
-                                    @if(Auth::user()->id == $account->user_created_id)
                                         <tr>
                                             <td> {{ $account->id }} </td>
                                             <td>
@@ -280,23 +290,46 @@
                                                             <button type="button" class="btn-close" id="{{ $key + 1 }}" onclick="closeAccountModal(this.id)"></button>
                                                         </div>
                                                         
-                                                        <form action="{{ route('dashboard.accountEdit', $account->id) }}" method="POST" style="margin: 20px;">
+                                                        <form id="add-account-form{{$key}}" action="{{ route('dashboard.accountEdit', $account->id) }}" method="POST" style="margin: 20px;">
                                                             @csrf
                                                             <input type="hidden" name="_method" value="PUT">
                                                             @method('PATCH')
 
-                                                            <div class="mb-3">
-                                                                <label for="account_number" class="form-label edit-label">Account Number</label> <input type="checkbox" class="ml-3" id="number{{ $key }}" onclick="checkBoxEdit(this.id)">
-                                                                <input type="number" style="pointer-events: none; background: #EFF1F3;" class="form-control" id="account_number{{$key}}" name="account_number" placeholder="{{ $account->account_number }}">
-                                                                <p style="color: red;"> @error('account_number') {{ $message }} @enderror </p>
+                                                            <div class="mb-3 pb-2 new-checklist">
+                                                                @if($account->ssh_ip == null)
+                                                                <div class="form-check form-check-inline" onclick="editProxy({{$key}})">
+                                                                    <input class="form-check-input edit-label" id="edit_proxy{{$key}}" type="radio" name="inlineRadioOptions" value="option1" checked>
+                                                                    <label class="form-check-label edit-label" for="inlineRadio1">Proxy</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline" onclick="editSsh({{$key}})">
+                                                                    <input class="form-check-input edit-label" id="edit_ssh{{$key}}" type="radio" name="inlineRadioOptions" value="option2">
+                                                                    <label class="form-check-label edit-label" for="inlineRadio2">SSH</label>
+                                                                </div>
+                                                                @else
+                                                                <div class="form-check form-check-inline" onclick="editProxy({{$key}})">
+                                                                    <input class="form-check-input edit-label" id="edit_proxy{{$key}}" type="radio" name="inlineRadioOptions" value="option1">
+                                                                    <label class="form-check-label edit-label" for="inlineRadio1">Proxy</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline" onclick="editSsh({{$key}})">
+                                                                    <input class="form-check-input edit-label" id="edit_ssh{{$key}}" type="radio" name="inlineRadioOptions" value="option2" checked>
+                                                                    <label class="form-check-label edit-label" for="inlineRadio2">SSH</label>
+                                                                </div>
+                                                                @endif
                                                             </div>
 
                                                             <div class="mb-3">
                                                                 <label for="account_type" class="form-label edit-label">Account Type</label>
                                                                 <select class="form-select" id="edit_account_type" name="account_type">
+                                                                    <!-- <option value="{{ $account->account_type }}">{{ $account->account_type }}</option>
+                                                                    <option value="L">L</option>
+                                                                    <option value="S">S</option> -->
+                                                                @if($account->account_type == 'L')
+                                                                    <option value="{{ $account->account_type }}">{{ $account->account_type }}</option>
+                                                                    <option value="S">S</option>
+                                                                @else
                                                                     <option value="{{ $account->account_type }}">{{ $account->account_type }}</option>
                                                                     <option value="L">L</option>
-                                                                    <option value="S">S</option>
+                                                                @endif
                                                                 </select>
                                                             </div>
 
@@ -324,7 +357,6 @@
                                                                 </select>
                                                             </div>
                                                             
-
                                                             <div class="mb-3">
                                                                 <label for="account_login" class="form-label edit-label">Account Login</label>
                                                                 <input type="text" class="form-control" id="edit_account_login" name="account_login" value="{{ $account->account_login }}" required>
@@ -339,32 +371,32 @@
 
                                                             <div class="mb-3">
                                                                 <label for="ssh_ip" class="form-label edit-label">SSH IP</label>
-                                                                @if($account->ssh_ip == null) <input type="text" class="form-control" id="edit_ssh_ip" name="ssh_ip" value="{{ $account->ssh_ip }}" disabled>
-                                                                @else <input type="text" class="form-control" id="edit_ssh_ip" name="ssh_ip" value="{{ $account->ssh_ip }}">
+                                                                @if($account->ssh_ip == null) <input type="text" class="form-control" id="edit_ssh_ip{{$key}}" name="ssh_ip" value="{{ $account->ssh_ip }}" disabled>
+                                                                @else <input type="text" class="form-control" id="edit_ssh_ip{{$key}}" name="ssh_ip" value="{{ $account->ssh_ip }}">
                                                                 @endif
                                                                 <p style="color: red;"> @error('ssh_ip') {{ $message }} @enderror </p>
                                                             </div>
 
                                                             <div class="mb-3">
                                                                 <label for="ssh_port" class="form-label edit-label">SSH PORT</label>
-                                                                @if($account->ssh_port == null) <input type="number" class="form-control" id="edit_ssh_port" name="ssh_port" value="{{ $account->ssh_port }}" disabled>
-                                                                @else <input type="number" class="form-control" id="edit_ssh_port" name="ssh_port" value="{{ $account->ssh_port }}">
+                                                                @if($account->ssh_port == null) <input type="number" class="form-control" id="edit_ssh_port{{$key}}" name="ssh_port" value="{{ $account->ssh_port }}" disabled>
+                                                                @else <input type="number" class="form-control" id="edit_ssh_port{{$key}}" name="ssh_port" value="{{ $account->ssh_port }}">
                                                                 @endif
                                                                 <p style="color: red;"> @error('ssh_port') {{ $message }} @enderror </p>
                                                             </div>
 
                                                             <div class="mb-3">
                                                                 <label for="ssh_login" class="form-label edit-label">SSH LOGIN</label>
-                                                                @if($account->ssh_login == null) <input type="text" class="form-control" id="edit_ssh_login" name="ssh_login" value="{{ $account->ssh_login }}" disabled>
-                                                                @else <input type="text" class="form-control" id="edit_ssh_login" name="ssh_login" value="{{ $account->ssh_login }}">
+                                                                @if($account->ssh_login == null) <input type="text" class="form-control" id="edit_ssh_login{{$key}}" name="ssh_login" value="{{ $account->ssh_login }}" disabled>
+                                                                @else <input type="text" class="form-control" id="edit_ssh_login{{$key}}" name="ssh_login" value="{{ $account->ssh_login }}">
                                                                 @endif
                                                                 <p style="color: red;"> @error('ssh_login') {{ $message }} @enderror </p>
                                                             </div>
 
                                                             <div class="mb-3">
                                                                 <label for="ssh_pwd" class="form-label edit-label">SSH PWD</label>
-                                                                @if($account->ssh_pwd == null) <input type="text" class="form-control" id="edit_ssh_pwd" name="ssh_pwd" value="{{ $account->ssh_pwd }}" disabled>
-                                                                @else <input type="text" class="form-control" id="edit_ssh_pwd" name="ssh_pwd" value="{{ $account->ssh_pwd }}">
+                                                                @if($account->ssh_pwd == null) <input type="text" class="form-control" id="edit_ssh_pwd{{$key}}" name="ssh_pwd" value="{{ $account->ssh_pwd }}" disabled>
+                                                                @else <input type="text" class="form-control" id="edit_ssh_pwd{{$key}}" name="ssh_pwd" value="{{ $account->ssh_pwd }}">
                                                                 @endif
                                                                 <p style="color: red;"> @error('ssh_pwd') {{ $message }} @enderror </p>
                                                             </div>
@@ -384,13 +416,13 @@
                                                             <div class="mb-3">
                                                                 <label for="comment" class="form-label edit-label">Comment</label>
                                                                 <textarea class="form-control" id="edit_comment" name="comment"> {{ $account->comment }} </textarea>
-                                                                <!-- <p style="color: red;"> @error('comment') {{ $message }} @enderror </p> -->
                                                             </div>
 
-                                                            <button type="submit" class="btn btn-primary">Update</button>
+                                                            <!-- <button type="submit" class="btn btn-primary">Update</button> -->
                                                         </form>
 
                                                         <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-outline-primary" form="add-account-form{{$key}}">Update</button>
                                                             <button type="button" class="btn btn-outline-secondary" id="{{ $key + 1 }}" onclick="closeModal(this.id)">Close</button>
                                                         </div>
                                                     </div>
@@ -398,13 +430,14 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endif
                                 @endif
                             @endforeach
                         </tbody>
                     </table>
+                    <span> {{ $auth_user_accounts->links() }} </span>
                 </div>
             </div>
         </div>
     </div>
+
 </x-app-layout>

@@ -25,11 +25,11 @@
                         </x-nav-link>
                     </div>
 
-                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <!-- <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-nav-link :href="route('register')" :active="request()->routeIs('register')" style="text-decoration: none">
                             {{ __('Register user') }}
                         </x-nav-link>
-                    </div>
+                    </div> -->
                 @endif
 
                 @if (Auth::user()->hasRole('roller'))
