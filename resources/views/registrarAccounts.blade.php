@@ -168,23 +168,34 @@
                             </tr>
                         </thead>
                         <tbody>
+                            
+                            <div style="display: flex; position: relative;">
                                 
-                            <form action="{{ route('dashboard.numberOfRows') }}" method="POST">
-                                @csrf
-                                @method('PUT')
-                                <div style="display: flex;">
-                                    <label for="Pages" class="rows-label mr-4" style="line-height: 38px !important;">Nomber of rows:</label>
-                                    <select id="pages" class="form-select" name="pages" onchange="this.form.submit()" style="width: 80px;">
-                                        <option class="testtest" value="{{ $auth_user_row }}" selected>{{ $auth_user_row }}</option>
-                                        <option value="5">5</option>
-                                        <option value="25">25</option>
-                                        <option value="50">50</option>
-                                        <option value="70">70</option>
-                                        <option value="100">100</option>
-                                    </select>
+                                <form action="{{ route('dashboard.numberOfRows') }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    
+                                        <label class="pagination_labbel mr-2" for="Pages" class="rows-label" style="line-height: 38px !important;">Show </label>
+                                        <select id="pages" class="form-select" name="pages" onchange="this.form.submit()" style="width: 80px; height: 40px;">
+                                            <option class="testtest" value="{{ $auth_user_row }}" selected>{{ $auth_user_row }}</option>
+                                            <option value="5">5</option>
+                                            <option value="25">25</option>
+                                            <option value="50">50</option>
+                                            <option value="70">70</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                        <label class="pagination_labbel ml-2" for="Pages" class="rows-label mr-4" style="line-height: 38px !important;">Entries</label>
+                                    
+                                </form>
+                                <div class="search_div" style="max-width: 300px; display: flex; position: absolute; right: 0;">
+                                    <form action="{{ route('dashboard.accountsList') }}" method="GET">
+                                        @csrf
+                                            <input type="text" id="account_search" name="account_search" class="form-control" style="height: 40px;" placeholder="{{ $search_item_text }}">
+                                            <button class="btn btn-outline-secondary ml-2" type="submit" id="button-addon2" style="height: 40px;">Search</button>
+                                    </form>
                                 </div>
-                                
-                            </form>
+                            </div>
+                            
                                
                             @foreach($auth_user_accounts as $key => $account)
                                 @if($account->status == 'in progress')
@@ -192,7 +203,7 @@
                                             <td> {{ $account->id }} </td>
                                             <td>
                                                 <div style="min-width: 90px !important">
-                                                    {{ $country[$key] }}-{{ $userShortNames[$key] }}-{{ $createdDates[$key] }}-{{ $account->account_number }}/{{ $account->account_type }}
+                                                    {{ $account->account_name }}
                                                 </div>
                                             </td>
                                             <td> {{ $account->account_login }} </td>

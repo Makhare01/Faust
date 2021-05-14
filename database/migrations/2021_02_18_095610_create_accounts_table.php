@@ -15,6 +15,7 @@ class CreateAccountsTable extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('account_name');
             $table->integer('account_number');
             $table->string('account_type');
             $table->string('country_code');
@@ -22,15 +23,16 @@ class CreateAccountsTable extends Migration
             $table->string('account_login');
             $table->string('account_pwd');
             
-            $table->string('ssh_ip');
-            $table->float('ssh_port');
-            $table->string('ssh_login');
-            $table->string('ssh_pwd');
+            $table->string('ssh_ip')->nullable();
+            $table->float('ssh_port')->nullable();
+            $table->string('ssh_login')->nullable();
+            $table->string('ssh_pwd')->nullable();
             
             $table->string('country');
             $table->string('city');
             $table->string('zip');
             $table->string('state')->default('N/A');
+            $table->integer('rows');
             $table->timestamp('company_created_date')->nullable();
 
             $table->string('status')->default('in progress');

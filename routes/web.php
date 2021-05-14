@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\RegistrarController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -50,12 +52,12 @@ Route::group(['middleware' => ['auth', 'role:superadmin']], function() {
 
 // for registrar
 Route::group(['middleware' => ['auth', 'role:registrar']], function() { 
-    Route::get('/dashboard/accountsList', 'App\Http\Controllers\RegistrarController@accountsList')->name('dashboard.accountsList');
-    Route::post('/dashboard/accountsList', 'App\Http\Controllers\RegistrarController@addAccount')->name('dashboard.accountsListPost'); 
-    Route::delete('/dashboard/accountsList/{id}', 'App\Http\Controllers\RegistrarController@accountDestroy')->name('dashboard.accountDestroy');
-    Route::put('/dashboard/accountsList', 'App\Http\Controllers\RegistrarController@numberOfRows')->name('dashboard.numberOfRows');
-    Route::put('/dashboard/accountsList/{id}', 'App\Http\Controllers\RegistrarController@accountStatus')->name('dashboard.accountStatus');
-    Route::patch('/dashboard/accountsList/{id}', 'App\Http\Controllers\RegistrarController@accountEdit')->name('dashboard.accountEdit');
+    Route::get('/dashboard/accountsList', [RegistrarController::class, 'accountsList'])->name('dashboard.accountsList');
+    Route::post('/dashboard/accountsList', [RegistrarController::class, 'addAccount'])->name('dashboard.accountsListPost'); 
+    Route::delete('/dashboard/accountsList/{id}', [RegistrarController::class, 'accountDestroy'])->name('dashboard.accountDestroy');
+    Route::put('/dashboard/accountsList', [RegistrarController::class, 'numberOfRows'])->name('dashboard.numberOfRows');
+    Route::put('/dashboard/accountsList/{id}', [RegistrarController::class, 'accountStatus'])->name('dashboard.accountStatus');
+    Route::patch('/dashboard/accountsList/{id}', [RegistrarController::class, 'accountEdit'])->name('dashboard.accountEdit');
 });
 
 //auth route for both 
