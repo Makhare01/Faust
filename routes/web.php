@@ -33,18 +33,20 @@ Route::group(['middleware' => ['auth', 'role:admin']], function() {
 
 // for roller
 Route::group(['middleware' => ['auth', 'role:roller']], function() { 
-    Route::get('/dashboard/offers', 'App\Http\Controllers\RollerController@offers')->name('dashboard.offers');
-    Route::get('/dashboard/accounts', 'App\Http\Controllers\RollerController@accounts')->name('dashboard.accounts');
-    Route::post('/dashboard/offers', 'App\Http\Controllers\RollerController@accountOffer')->name('dashboard.offers');
-    Route::patch('/dashboard/offers/{id}', 'App\Http\Controllers\RollerController@status')->name('dashboard.status');
-    Route::put('/dashboard/offers/{id}', 'App\Http\Controllers\RollerController@suspend')->name('dashboard.suspend');
+    Route::get('/dashboard/cases', 'App\Http\Controllers\RollerController@cases')->name('dashboard.cases');
+    Route::post('/dashboard/cases', 'App\Http\Controllers\RollerController@createCase')->name('dashboard.createCase');
+    Route::put('/dashboard/cases', 'App\Http\Controllers\RollerController@Rows')->name('dashboard.rows');
+    Route::patch('/dashboard/cases/{id}', 'App\Http\Controllers\RollerController@status')->name('dashboard.status');
+    Route::put('/dashboard/cases/{id}', 'App\Http\Controllers\RollerController@suspend')->name('dashboard.suspend');
 });
 
 
 // for superadmin
 Route::group(['middleware' => ['auth', 'role:superadmin']], function() { 
-    Route::post('/dashboard/offersList', 'App\Http\Controllers\SuperadminController@addOffer')->name('dashboard.addOffer');
     Route::get('/dashboard/offersList', 'App\Http\Controllers\SuperadminController@offersList')->name('dashboard.offersList');
+    Route::post('/dashboard/offersList', 'App\Http\Controllers\SuperadminController@addOffer')->name('dashboard.addOffer');
+    
+    Route::put('/dashboard/offersList', 'App\Http\Controllers\SuperadminController@changeRows')->name('dashboard.changeRows');
     Route::delete('/dashboard/offersList/{id}', 'App\Http\Controllers\SuperadminController@offerDestroy')->name('dashboard.offerDestroy');
     Route::patch('/dashboard/offersList/{id}', 'App\Http\Controllers\SuperadminController@offerEdit')->name('dashboard.offerEdit');
     Route::put('/dashboard/offersList/{id1}', 'App\Http\Controllers\SuperadminController@offerStatus')->name('dashboard.offerStatus');

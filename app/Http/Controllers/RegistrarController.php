@@ -36,16 +36,20 @@ class RegistrarController extends Controller
         else if(array_key_exists('account_search', $_GET)) $search_item_text = $_GET['account_search'];
         else $search_item_text = "Search";
 
-        $rows = Account::pluck('rows','user_created_id');
-        $row = [];
-        foreach($rows as $key => $value) {
-            $row[$key] = $value;
-        }
+        // $rows = Account::pluck('rows','user_created_id');
+        // $row = [];
+        // foreach($rows as $key => $value) {
+        //     $row[$key] = $value;
+        // }
         
-        if(array_key_exists(Auth::user()->id, $row)) $auth_user_row = $row[Auth::user()->id];
-        else $auth_user_row = 5;
+        // if(array_key_exists(Auth::user()->id, $row)) $auth_user_row = $row[Auth::user()->id];
+        // else $auth_user_row = 5;
 
-        if(array_key_exists(Auth::user()->id, $row)) $paginate_row = $row[Auth::user()->id];
+        // if(array_key_exists(Auth::user()->id, $row)) $paginate_row = $row[Auth::user()->id];
+        // else $paginate_row = 5;
+
+        $account_for_pagination = Account::where('user_created_id', Auth::user()->id)->first();
+        if($account_for_pagination) $paginate_row = $account_for_pagination->rows;
         else $paginate_row = 5;
         
         if(array_key_exists('account_search', $_GET) && $_GET['account_search'] != "") {
@@ -73,7 +77,7 @@ class RegistrarController extends Controller
             'users' => $users,
             'allStates' => $allStates,
             'auth_user_accounts' => $auth_user_accounts,
-            'auth_user_row' => $auth_user_row,
+            'paginate_row' => $paginate_row,
             'search_item_text' => $search_item_text,
         ]);
     }

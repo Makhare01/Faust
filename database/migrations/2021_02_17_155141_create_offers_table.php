@@ -20,6 +20,7 @@ class CreateOffersTable extends Migration
             $table->decimal('bid');
             $table->string('status')->default('in progress');
             $table->longText('comment')->nullable();
+            $table->integer('rows')->default(25);
 
             $table->timestamps();
         });

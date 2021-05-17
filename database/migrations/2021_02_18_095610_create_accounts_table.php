@@ -32,11 +32,12 @@ class CreateAccountsTable extends Migration
             $table->string('city');
             $table->string('zip');
             $table->string('state')->default('N/A');
-            $table->integer('rows');
             $table->timestamp('company_created_date')->nullable();
 
             $table->string('status')->default('in progress');
             $table->longText('comment')->nullable();
+
+            $table->integer('rows')->default(25);
 
             $table->timestamps();
         });

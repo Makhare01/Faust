@@ -33,12 +33,11 @@
                 @endif
 
                 @if (Auth::user()->hasRole('roller'))
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('dashboard.offers')" :active="request()->routeIs('dashboard.offers')" style="text-decoration: none">
-                        {{ __('Roller Table') }}
-                    </x-nav-link>
-                </div>
-
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('dashboard.cases')" :active="request()->routeIs('dashboard.cases')" style="text-decoration: none">
+                            {{ __('Roller Table') }}
+                        </x-nav-link>
+                    </div>
                 @endif
 
                 @if (Auth::user()->hasRole('superadmin'))
@@ -118,7 +117,7 @@
             @endif
 
             @if (Auth::user()->hasRole('roller'))
-                <x-responsive-nav-link :href="route('dashboard.offers')" :active="request()->routeIs('dashboard.offers')" style="text-decoration: none">
+                <x-responsive-nav-link :href="route('dashboard.cases')" :active="request()->routeIs('dashboard.cases')" style="text-decoration: none">
                     {{ __('Roller Table') }}
                 </x-responsive-nav-link>
             @endif

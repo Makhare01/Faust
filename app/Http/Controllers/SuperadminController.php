@@ -13,7 +13,40 @@ use App\Models\Suspend;
 
 class SuperadminController extends Controller
 {
+    public function changeRows() {
+        Offer::query()->update([
+            "rows" => request('pages'),
+        ]);
+
+        return redirect('/dashboard/offersList');
+    }
+
     //Superadmin functions
+    public function offersList() {
+        $Offers_for_pagination = Offer::first();
+        if($Offers_for_pagination) $paginate_row = $Offers_for_pagination->rows;
+        else $paginate_row = 5;
+
+        if(array_key_exists('offer_search', $_GET) && $_GET['offer_search'] == "") $search_item_text = "Search";
+        else if(array_key_exists('offer_search', $_GET)) $search_item_text = $_GET['offer_search'];
+        else $search_item_text = "Search";
+
+        if(array_key_exists('offer_search', $_GET) && $_GET['offer_search'] != "") {
+            $offers = Offer::where('key', 'LIKE', "%".$_GET['offer_search']."%")
+                            ->orWhere('adds_text', 'LIKE', "%".$_GET['offer_search']."%")
+                            ->orWhere('bid', 'LIKE', "%".$_GET['offer_search']."%")
+                            ->orWhere('status', 'LIKE', "%".$_GET['offer_search']."%")
+                            ->orWhere('comment', 'LIKE', "%".$_GET['offer_search']."%")
+                            ->paginate($paginate_row);
+        } else $offers = Offer::paginate($paginate_row);
+        
+        
+        return view('superadminOffers', [
+            'offers' => $offers,
+            'search_item_text' => $search_item_text,
+            'paginate_row' => $paginate_row,
+        ]);
+    }
 
     public function addOffer() {
         //error_log(request('key')); //gamoitans formidan wamogebul informacias (name vels)
@@ -30,22 +63,11 @@ class SuperadminController extends Controller
         $offer->key = $data['key'];
         $offer->adds_text = $data['adds_text'];
         $offer->bid = $data['bid'];
-        $offer->comment = $data['comment'];
+        $offer->comment = request('comment');
 
         $offer->save();
 
         return redirect('/dashboard/offersList');
-    }
-
-    public function offersList() {
-        $offers = Offer::all(); //get all information from offer table
-        // $pizzas = Pizza::orderBy('name', 'desc')->get(); //get all information ordered by name
-        // $pizzas = Pizza::where('type', 'hawaian')->get(); //get all information where type is hawaian
-        // $pizzas = Pizza::latest()->get(); 
-
-        return view('superadminOffers', [
-            'offers' => $offers,
-        ]);
     }
 
     public function offerDestroy($id) {
@@ -60,14 +82,13 @@ class SuperadminController extends Controller
             'key' => ['required', 'string'],
             'adds_text' => ['required', 'string'],
             'bid' => ['required', 'numeric'],
-            'comment' => ['required', 'string'],
         ]);
 
         Offer::where("offer_id", $id)->update([
             "key" => $data['key'],
             "adds_text" => $data['adds_text'],
             "bid" => $data['bid'],
-            "comment" => $data['comment'],
+            "comment" => request('comment'),
         ]);
 
         return redirect('/dashboard/offersList');

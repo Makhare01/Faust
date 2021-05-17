@@ -45,7 +45,7 @@
                                     <div class="mb-3">
                                         <label for="comment" class="form-label">Comment</label>
                                         <!-- <input type="date" class="form-control" id="account_login" name="account_login"> -->
-                                        <textarea class="form-control" id="comment" name="comment" required></textarea>
+                                        <textarea class="form-control" id="comment" name="comment" ></textarea>
                                         <p style="color: red;"> @error('comment') {{ $message }} @enderror </p>
                                     </div>
 
@@ -90,6 +90,30 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <div style="display: flex; position: relative;" class="mb-3">
+                                <form action="{{ route('dashboard.changeRows') }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    
+                                    <label class="pagination_labbel mr-2" for="Pages" class="rows-label" style="line-height: 38px !important;">Show </label>
+                                    <select id="pages" class="form-select" name="pages" onchange="this.form.submit()" style="width: 80px; height: 40px;">
+                                        <option value="{{ $paginate_row }}" selected>{{ $paginate_row }}</option>
+                                        <option value="5">5</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="70">70</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                    <label class="pagination_labbel ml-2" for="Pages" class="rows-label mr-4" style="line-height: 38px !important;">Entries</label>
+                                </form>
+                                <div class="search_div" style="max-width: 300px; display: flex; position: absolute; right: 0;">
+                                    <form action="{{ route('dashboard.offersList') }}" method="GET">
+                                        @csrf
+                                        <input type="text" id="offer_search" name="offer_search" class="form-control" style="height: 40px;" placeholder="{{ $search_item_text }}">
+                                        <button class="btn btn-outline-secondary ml-2" type="submit" id="button-addon2" style="height: 40px;">Search</button>
+                                    </form>
+                                </div>
+                            </div>
                             @foreach($offers as $key => $offer)
                                 @if($offer->status == 'valid')
                                     <tr style="border-bottom: solid 4px #198754;">
@@ -258,6 +282,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <span> {{ $offers->links() }} </span>
                 </div>
             </div>
         </div>

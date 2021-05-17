@@ -15,65 +15,77 @@ class RollerController extends Controller
 {
     //roller functions
 
-    public function offers() {
+    public function Rows() {;
+        Accountoffer::where("user_id", Auth::user()->id)->update([
+            "rows" => request('pages'),
+        ]);
+
+        return redirect('/dashboard/cases');
+    }
+
+    public function cases() {
         include(app_path() . '/functions/converter.php');
 
+        $accountOffers_for_pagination = Accountoffer::where('user_id', Auth::user()->id)->first();
+        if($accountOffers_for_pagination) $paginate_row = $accountOffers_for_pagination->rows;
+        else $paginate_row = 5;
+
         $offers = Offer::all();
+        $offers_valid = Offer::where('status', "valid")->get();
         $accounts = Account::all();
+        $accounts_ready = Account::where('status', 'ready')->orWhere('status', 'elected')->get();
         $users = User::all();
-        $accountOffers = Accountoffer::all();
-        $date = Account::select('created_at')->get();
-        $countryArr = Account::pluck('country_code');
+        $accountOffers_all = Accountoffer::all();
 
-        global $dates;
-        foreach($date as $key => $value) {
-            $dates[] = date_parse($value['created_at']);
-        }
+        // $accountOffers = Accountoffer::where('user_id', Auth::user()->id)->where('status', '<>', 'suspend')->paginate($paginate_row);
+        
+        if(array_key_exists('case_search', $_GET) && $_GET['case_search'] == "") $search_item_text = "Search";
+        else if(array_key_exists('case_search', $_GET)) $search_item_text = $_GET['case_search'];
+        else $search_item_text = "Search";
 
-        global $country;
-        foreach($countryArr as $value) {
-            $country[] = converter($value);
-        }
-
-        global $userShortNames;
-        foreach($accounts as $account) {
-            foreach($users as $user) {
-                if($user->id == $account->user_created_id) {
-                    $userShortNames[] = $user->first_name[0].$user->last_name[0];
-                    break;
-                }
-            }
-        }
-
-        global $createdDates;
-        foreach($dates as $key => $date) {
-            $TMP = "";
-            if(intval($date['day']) < 10) {
-                $TMP = $TMP.'0'.$dates[$key]['day'];
-            } 
-            else $TMP = $TMP.$dates[$key]['day'];
-
-            if(intval($date['month']) < 10) {
-                $TMP = $TMP.'0'.$dates[$key]['month'];
-            } 
-            else $TMP = $TMP.$dates[$key]['month'];
-
-            $createdDates[] = $TMP;
-        }
-
-        $index = 0;
+        if(array_key_exists('case_search', $_GET) && $_GET['case_search'] != "") {
+                $accountOffers = Accountoffer::where('user_id', Auth::user()->id)
+                                                ->where('status', '<>', 'suspend')
+                                                ->Where(function($query) {
+                                                    // dd($query);
+                                                    // exit;
+                                                    $query->where('account', 'LIKE', "%".$_GET['case_search']."%")
+                                                    ->orWhere('offer', 'LIKE', "%".$_GET['case_search']."%")
+                                                    ->orWhere('status', 'LIKE', "%".$_GET['case_search']."%");
+                                                })->paginate($paginate_row);
+        } else $accountOffers = Accountoffer::where('user_id', Auth::user()->id)
+                                                ->where('status', '<>', 'suspend')
+                                                ->paginate($paginate_row);
 
         return view('rollerCase', [
             'offers' => $offers,
+            'offers_valid' => $offers_valid,
             'accounts' => $accounts,
+            'accounts_ready' => $accounts_ready,
+            'accountOffers_all' => $accountOffers_all,
             'accountOffers' => $accountOffers,
-            'users' => $users,
-            'dates' => $dates,
-            'country' => $country,
-            'index' => $index,
-            'userShortNames' => $userShortNames,
-            'createdDates' => $createdDates,
+            'search_item_text' => $search_item_text,
+            'paginate_row' => $paginate_row,
         ]);
+    }
+
+    public function createCase() {
+        $accountOffer = new Accountoffer(); // create Account_Offer model
+
+        Account::where("id", request('account_id'))->update([
+            'status' => 'elected',
+        ]);
+
+        $accountOffer->account_id = request('account_id');
+        $accountOffer->offer_id = request('offer_id');
+        $accountOffer->user_id = Auth::user()->id;
+        $accountOffer->account = request('choosenAccount');
+        $accountOffer->offer = request('choosenOffer');
+        $accountOffer->status = 'active';
+
+        $accountOffer->save(); // save to database
+
+        return redirect('/dashboard/cases');
     }
 
     public function status($id) {
@@ -81,7 +93,7 @@ class RollerController extends Controller
             'status' => request('status'),
         ]);
 
-        return redirect('/dashboard/offers');
+        return redirect('/dashboard/cases');
     }
 
     public function suspend($id) {
@@ -101,38 +113,23 @@ class RollerController extends Controller
 
         $suspend->save();
 
-        return redirect('/dashboard/offers');
+        return redirect('/dashboard/cases');
     }
 
-    public function accountOffer() {
-        $accountOffer = new Accountoffer(); // create Account_Offer model
+    // public function accounts() {
+    //     $accounts = Account::all();
 
-        $accountOffer->account_id = request('account_id');
-        $accountOffer->offer_id = request('offer_id');
-        $accountOffer->user_id = Auth::user()->id;
-        $accountOffer->account = request('choosenAccount');
-        $accountOffer->offer = request('choosenOffer');
-        $accountOffer->status = 'active';
+    //     $date = Account::select('created_at')->get();
 
-        $accountOffer->save(); // save to database
-
-        return redirect('/dashboard/offers');
-    }
-
-    public function accounts() {
-        $accounts = Account::all();
-
-        $date = Account::select('created_at')->get();
-
-        foreach($date as $value) {
-            $dates[] = date_parse($value);
-        }
+    //     foreach($date as $value) {
+    //         $dates[] = date_parse($value);
+    //     }
 
 
-        return view('accounts', [
-            'accounts' => $accounts,
-            'date' => $date, 
-            'dates' => $dates,
-        ]);
-    }
+    //     return view('accounts', [
+    //         'accounts' => $accounts,
+    //         'date' => $date, 
+    //         'dates' => $dates,
+    //     ]);
+    // }
 }
