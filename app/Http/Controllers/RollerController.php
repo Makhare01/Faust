@@ -115,21 +115,4 @@ class RollerController extends Controller
 
         return redirect('/dashboard/cases');
     }
-
-    // public function accounts() {
-    //     $accounts = Account::all();
-
-    //     $date = Account::select('created_at')->get();
-
-    //     foreach($date as $value) {
-    //         $dates[] = date_parse($value);
-    //     }
-
-
-    //     return view('accounts', [
-    //         'accounts' => $accounts,
-    //         'date' => $date, 
-    //         'dates' => $dates,
-    //     ]);
-    // }
 }

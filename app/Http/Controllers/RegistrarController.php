@@ -15,7 +15,7 @@ use App\Models\Suspend;
 class RegistrarController extends Controller
 {
     //Registrar functions
-    public function numberOfRows() {;
+    public function numberOfRows() {
         Account::where("user_created_id", Auth::user()->id)->update([
             "rows" => request('pages'),
         ]);
@@ -25,28 +25,12 @@ class RegistrarController extends Controller
 
     public function accountsList(Request $request) {
         include(app_path() . '/functions/converter.php');
-        
-        $accounts = Account::all();
+
         $users = User::all();
-        $usersForPagination = User::where('role_id', 'registrar')->get();
-        $date = Account::select('created_at')->get();
-        $countryArr = Account::pluck('country_code');
 
         if(array_key_exists('account_search', $_GET) && $_GET['account_search'] == "") $search_item_text = "Search";
         else if(array_key_exists('account_search', $_GET)) $search_item_text = $_GET['account_search'];
         else $search_item_text = "Search";
-
-        // $rows = Account::pluck('rows','user_created_id');
-        // $row = [];
-        // foreach($rows as $key => $value) {
-        //     $row[$key] = $value;
-        // }
-        
-        // if(array_key_exists(Auth::user()->id, $row)) $auth_user_row = $row[Auth::user()->id];
-        // else $auth_user_row = 5;
-
-        // if(array_key_exists(Auth::user()->id, $row)) $paginate_row = $row[Auth::user()->id];
-        // else $paginate_row = 5;
 
         $account_for_pagination = Account::where('user_created_id', Auth::user()->id)->first();
         if($account_for_pagination) $paginate_row = $account_for_pagination->rows;
@@ -69,7 +53,7 @@ class RegistrarController extends Controller
                                                 ->orWhere('zip', 'LIKE', "%".$_GET['account_search']."%")
                                                 ->orWhere('comment', 'LIKE', "%".$_GET['account_search']."%");
                                             })->paginate($paginate_row);
-        }else $auth_user_accounts = Account::where('user_created_id', Auth::user()->id)
+        } else $auth_user_accounts = Account::where('user_created_id', Auth::user()->id)
                                             ->where('status', "in progress")
                                             ->paginate($paginate_row);
 
@@ -92,38 +76,11 @@ class RegistrarController extends Controller
             $add_rows = $tmp->rows;
         } else $add_rows = 25;
 
-        $date = Account::select('created_at')->get();
-        $countryArr = Account::pluck('country_code');
-        $AccountNumbers = Account::pluck('account_number');
-
-
-        // Account number
-        $mydate = getdate(date("U"));
-        $currentDate = intval($mydate['mday'] . $mydate['mon'] . $mydate['year']); //Current date
-        $Acc_number = 1;
-        if(Account::select('created_at')->exists()){
-            foreach($date as $key => $value) {
-                $dates[] = date_parse($value['created_at']);
-            }
-            foreach($dates as $date) {
-                $alldates[] = intval($date['day'].$date['month'].$date['year']); //All date in the table
-            }
-            for($i=0; $i<count($alldates); $i++):
-                if($countryArr[$i]==request('country_code') && $alldates[$i]==$currentDate) {
-                    $Acc_number++;
-                }
-            endfor;
-        } else $dates[] = null;
-
+        $day = date("d");
+        $month = date("m");
         $short_first_name = Auth::user()->first_name;
         $short_last_name = Auth::user()->last_name;
         $short_country_code = request('country_code');
-
-        if(intval($mydate['mday']) < 10) $short_current_date_day = '0'. $mydate['mday'];
-        else $short_current_date_day = $mydate['mday'];
-        if(intval($mydate['mon']) < 10) $short_current_date_mon = '0'. $mydate['mon'];
-        else $short_current_date_mon = $mydate['mon'];
-        $short_current_date = $short_current_date_day.$short_current_date_mon;
 
         $data = request()->validate([
             'account_type' => ['required', 'string', 'max:2'],
@@ -140,9 +97,13 @@ class RegistrarController extends Controller
             'comment' => ['string', "nullable"],
         ]);
 
-        $account_name = converter($short_country_code).'-'.strtoupper($short_first_name[0]).strtoupper($short_last_name[0]).'-'.$short_current_date.'-'.$Acc_number.'/'.$data['account_type'];
-        // dd($account_name);
-        // exit;
+        if(Account::whereDate('updated_at', Carbon::today())->where('country_code', $data['country_code'])->exists()) {
+            $last_account_for_accountNumber = Account::whereDate('updated_at', Carbon::today())->where('country_code', $data['country_code'])->get();
+            $acc_index = count($last_account_for_accountNumber)-1;
+            $Acc_number = $last_account_for_accountNumber[$acc_index]->account_number + 1;
+        } else $Acc_number = 1;
+        
+        $account_name = converter($short_country_code).'-'.strtoupper($short_first_name[0]).strtoupper($short_last_name[0]).'-'.$day.$month.'-'.$Acc_number.'/'.$data['account_type'];
 
         $account->account_number = $Acc_number;
         $account->account_name = $account_name;
@@ -179,31 +140,17 @@ class RegistrarController extends Controller
     }
 
     public function accountEdit($id) {
+        include(app_path() . '/functions/converter.php');
+        
         if(Account::where('user_created_id', Auth::user()->id)->exists()) {
             $add_rows = Account::where('user_created_id', Auth::user()->id)->first(); //table rows for auth user
         } else $add_rows = 25;
 
-        $date = Account::select('created_at')->get();
-        $countryArr = Account::pluck('country_code');
-
-        $mydate = getdate(date("U"));
-        $currentDate = intval($mydate['mday'] . $mydate['mon'] . $mydate['year']); //Current date
-        
-        $Acc_number = 1;
-
-        if(Account::select('created_at')->exists()){
-            foreach($date as $key => $value) {
-                $dates[] = date_parse($value['created_at']);
-            }
-            foreach($dates as $date) {
-                $alldates[] = intval($date['day'].$date['month'].$date['year']); //All date in the table
-            }
-            for($i=0; $i<count($alldates); $i++):
-                if($countryArr[$i]==request('country_code') && $alldates[$i]==$currentDate) {
-                    $Acc_number++;
-                }
-            endfor;
-        }else $dates[] = null;
+        $day = date("d");
+        $month = date("m");
+        $short_first_name = Auth::user()->first_name;
+        $short_last_name = Auth::user()->last_name;
+        $short_country_code = request('country_code');
 
         $data = request()->validate([
             // 'account_number' => ['required', 'number'],
@@ -221,6 +168,14 @@ class RegistrarController extends Controller
             'comment' => ['string', "nullable"],
         ]);
 
+        if(Account::whereDate('updated_at', Carbon::today())->where('country_code', $data['country_code'])->exists()) {
+            $last_account_for_accountNumber = Account::whereDate('updated_at', Carbon::today())->where('country_code', $data['country_code'])->get();
+            $acc_index = count($last_account_for_accountNumber)-1;
+            $Acc_number = $last_account_for_accountNumber[$acc_index]->account_number + 1;
+        } else $Acc_number = 1;
+
+        $account_name = converter($short_country_code).'-'.strtoupper($short_first_name[0]).strtoupper($short_last_name[0]).'-'.$day.$month.'-'.$Acc_number.'/'.$data['account_type'];
+
         if(!array_key_exists("ssh_ip",$data)) $data['ssh_ip'] = null;
 
         if(!array_key_exists("ssh_port",$data)) $data['ssh_port'] = null;
@@ -230,6 +185,7 @@ class RegistrarController extends Controller
         if(!array_key_exists('ssh_pwd',$data)) $data['ssh_pwd'] = null;
 
         Account::where("id", $id)->update([
+            "account_name" => $account_name,
             "account_number" => $Acc_number,
             "account_type" => $data['account_type'],
             "country_code" => $data['country_code'],

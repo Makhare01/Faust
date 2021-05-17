@@ -13,6 +13,8 @@ use App\Models\Suspend;
 
 class SuperadminController extends Controller
 {
+
+    //Superadmin functions
     public function changeRows() {
         Offer::query()->update([
             "rows" => request('pages'),
@@ -20,8 +22,7 @@ class SuperadminController extends Controller
 
         return redirect('/dashboard/offersList');
     }
-
-    //Superadmin functions
+    
     public function offersList() {
         $Offers_for_pagination = Offer::first();
         if($Offers_for_pagination) $paginate_row = $Offers_for_pagination->rows;
@@ -57,13 +58,13 @@ class SuperadminController extends Controller
             'key' => ['required', 'string'],
             'adds_text' => ['required', 'string'],
             'bid' => ['required', 'numeric'],
-            'comment' => ['required', 'string'],
+            'comment' => ['string', 'nullable'],
         ]);
 
         $offer->key = $data['key'];
         $offer->adds_text = $data['adds_text'];
         $offer->bid = $data['bid'];
-        $offer->comment = request('comment');
+        $offer->comment = $data['comment'];
 
         $offer->save();
 
@@ -82,13 +83,14 @@ class SuperadminController extends Controller
             'key' => ['required', 'string'],
             'adds_text' => ['required', 'string'],
             'bid' => ['required', 'numeric'],
+            'comment' => ['string', 'nullable'],
         ]);
 
         Offer::where("offer_id", $id)->update([
             "key" => $data['key'],
             "adds_text" => $data['adds_text'],
             "bid" => $data['bid'],
-            "comment" => request('comment'),
+            "comment" => $data['comment'],
         ]);
 
         return redirect('/dashboard/offersList');
