@@ -22,7 +22,7 @@
                             </div>
                             <div class="modal-body">
                                 <!-- Add offer -->
-                                <form action="/dashboard/offersList" method="POST">
+                                <form action="/dashboard/offersList" method="POST" id="offer_new_form">
                                     @csrf
                                     <div class="mb-3">
                                         <label for="key" class="form-label">Key</label>
@@ -48,14 +48,11 @@
                                         <textarea class="form-control" id="comment" name="comment" ></textarea>
                                         <p style="color: red;"> @error('comment') {{ $message }} @enderror </p>
                                     </div>
-
-                                    <button type="submit" class="btn btn-primary">Add</button>
-
                                 </form>
                             </div>
                             <div class="modal-footer">
+                                <button type="submit" class="btn btn-outline-primary" form="offer_new_form">Add</button>
                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                                <!-- <button type="button" class="btn btn-outline-success">Save changes</button> -->
                             </div>
                         </div>
                     </div>
@@ -132,33 +129,36 @@
                                             <div style="display: flex; width: 100%; height: 100%;">
                                                 <!-- Valid modal -->
                                                 @if($offer->status == 'valid')
-                                                    <button class="btn btn-outline-success" disabled>Valid</button>
-                                                @else <button class="btn btn-outline-success" id="{{ $key + 1 }}" onclick="modalSupValid(this.id)">Valid</button>
+                                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#offerValidModal{{$key}}" disabled>  Valid </button>
+                                                @else <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#offerValidModal{{$key}}">  Valid </button>
                                                 @endif
+                                                
 
-                                                <div id="myModalSupValid{{ $key + 1 }}" class="modalnew">
-                                                    <div class="modal-contentnew" style="margin-top: 10%;">
-                                                        <div class="modal-header" style="width: 100% !important;">
-                                                            <h5 class="modal-title">Change status</h5>
-                                                            <button type="button" class="btn-close" id="{{ $key + 1 }}" onclick="closeSupValidModalX(this.id)"></button>
-                                                        </div>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="offerValidModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Change status</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p style="font-size: 24px;">Are you sure you want to change status (valid)? </p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <form action="{{ route('dashboard.offerStatus', $offer->offer_id) }}" method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="_method" value="PUT">
+                                                                    @method('PUT')
 
-                                                        <div class="modal-body">
-                                                        <p style="font-size: 24px;">Are you sure you want to change status (valid)? </p>
-                                                        </div>
-
-                                                        <div class="modal-footer">
-                                                            <form action="{{ route('dashboard.offerStatus', $offer->offer_id) }}" method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="_method" value="PUT">
-                                                                @method('PUT')
-
-                                                                <div>
-                                                                    <input type="hidden" class="form-control" id="status" name="status" value="valid">
-                                                                </div>
-                                                                <button type="submit" class="btn btn-outline-success">Valid</button>
-                                                            </form>
-                                                            <button type="button" class="btn btn-outline-secondary" id="{{ $key + 1 }}" onclick="closeSupValidModal(this.id)">Close</button>
+                                                                    <div>
+                                                                        <input type="hidden" class="form-control" id="status" name="status" value="valid">
+                                                                    </div>
+                                                                    <button type="submit" class="btn btn-outline-success">Valid</button>
+                                                                </form>
+                                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                                                                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -166,35 +166,37 @@
 
                                                 <!-- Work modal -->
                                                 @if($offer->status == 'work')
-                                                    <button class="btn btn-outline-secondary ml-2" disabled>Work</button>
-                                                @else <button class="btn btn-outline-secondary ml-2" id="{{ $key + 1 }}" onclick="modalSupWork(this.id)">Work</button>
-                                                @endif
+                                                    <button type="button" class="btn btn-outline-secondary ml-2" data-bs-toggle="modal" data-bs-target="#offerWorkModal{{$key}}" disabled> Work </button>
+                                                @else <button type="button" class="btn btn-outline-secondary ml-2" data-bs-toggle="modal" data-bs-target="#offerWorkModal{{$key}}"> Work </button>
+                                                @endif                                                
 
-                                                <div id="myModalSupWork{{ $key + 1 }}" class="modalnew">
-                                                    <div class="modal-contentnew" style="margin-top: 10%;">
-                                                        <div class="modal-header" style="width: 100% !important;">
-                                                            <h5 class="modal-title">Change status</h5>
-                                                            <button type="button" class="btn-close" id="{{ $key + 1 }}" onclick="closeSupWorkModalX(this.id)"></button>
-                                                        </div>
-
-                                                        <div class="modal-body">
-                                                        <p style="font-size: 24px;">Are you sure you want to change status (work)? </p>
-                                                        </div>
-
-                                                        <div class="modal-footer">
-                                                            <form action="{{ route('dashboard.offerStatus', $offer->offer_id) }}" method="POST" class="ml-2">
-                                                                @csrf
-                                                                <input type="hidden" name="_method" value="PUT">
-                                                                @method('PUT')
-
-                                                                <div>
-                                                                    <input type="hidden" class="form-control" id="status" name="status" value="work">
-                                                                </div>
-                                                                <button type="submit" class="btn btn-outline-secondary">Work</button>
-                                                            </form>
-                                                            <button type="button" class="btn btn-outline-secondary" id="{{ $key + 1 }}" onclick="closeSupWorkModal(this.id)">Close</button>
-                                                        </div>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="offerWorkModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Change status</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
+                                                    <div class="modal-body">
+                                                        <p style="font-size: 24px;">Are you sure you want to change status (work)? </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <form action="{{ route('dashboard.offerStatus', $offer->offer_id) }}" method="POST" class="ml-2">
+                                                            @csrf
+                                                            <input type="hidden" name="_method" value="PUT">
+                                                            @method('PUT')
+
+                                                            <div>
+                                                                <input type="hidden" class="form-control" id="status" name="status" value="work">
+                                                            </div>
+                                                            <button type="submit" class="btn btn-outline-secondary">Work</button>
+                                                        </form>
+                                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                                                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                                    </div>
+                                                    </div>
+                                                </div>
                                                 </div>
                                                 <!-- End Delete modal -->
                                             </div>
@@ -203,76 +205,82 @@
                                             <div style="display: flex; width: 100%; height: 100%;">
 
                                                 <!-- Delete modal -->
-                                                <button class="btn btn-outline-danger ml-1" id="{{ $key + 1 }}" onclick="modalSupDelete(this.id)">Delete</button>
-                                                    
-                                                <div id="myModalSupDelete{{ $key + 1 }}" class="modalnew">
-                                                    <div class="modal-contentnew" style="margin-top: 10%;">
-                                                        <div class="modal-header" style="width: 100% !important;">
-                                                            <h5 class="modal-title" style="color: red;">Delete Offer</h5>
-                                                            <button type="button" class="btn-close" id="{{ $key + 1 }}" onclick="closeSupDeleteModalX(this.id)"></button>
-                                                        </div>
+                                                <button type="button" class="btn btn-outline-danger ml-1" data-bs-toggle="modal" data-bs-target="#offerDeleteModal{{$key}}">
+                                                    Delete
+                                                </button>
 
-                                                        <div class="modal-body">
-                                                        <p style="font-size: 24px;">Are you sure you want to delete offer? </p>
-                                                        </div>
-
-                                                        <div class="modal-footer">
-                                                            <form action="{{ route('dashboard.offerDestroy', $offer->offer_id) }}" method="POST">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button class="btn btn-outline-danger">Delete</button>
-                                                            </form>
-                                                            <button type="button" class="btn btn-outline-secondary" id="{{ $key + 1 }}" onclick="closeSupDeleteModal(this.id)">Close</button>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="offerDeleteModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Delete Offer</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p style="font-size: 24px;">Are you sure you want to delete offer? </p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <form action="{{ route('dashboard.offerDestroy', $offer->offer_id) }}" method="POST">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button class="btn btn-outline-danger">Delete</button>
+                                                                </form>
+                                                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <!-- End Delete modal -->
 
-                                                <button class="btn btn-outline-info ml-2" id="{{ $key + 1 }}" onclick="modal(this.id)">Edit</button>
+                                                <!-- Edit Modal -->
+                                                <button type="button" class="btn btn-outline-info ml-2" data-bs-toggle="modal" data-bs-target="#offerEditModal{{$key}}">
+                                                    Edit
+                                                </button>
 
-                                                <!-- The Modal -->
-                                                <div id="myModal{{ $key + 1 }}" class="modalnew">
-
-                                                    <!-- Modal content -->
-                                                    <div class="modal-contentnew">
-                                                        <div class="modal-header" style="width: 100% !important;">
-                                                            <h5 class="modal-title">Edit Offer</h5>
-                                                            <button type="button" class="btn-close" id="{{ $key + 1 }}" onclick="closeModalO(this.id)"></button>
-                                                        </div>
-                                                        
-                                                        <form action="{{ route('dashboard.offerEdit', $offer->offer_id) }}" method="POST" style="margin: 20px;">  
-                                                            @csrf
-                                                            <input type="hidden" name="_method" value="PUT">
-                                                            @method('PATCH')
-
-                                                            <div class="mb-3 mt-2">
-                                                                <label for="key" class="form-label">Key</label>
-                                                                <input type="text" class="form-control" id="key" name="key" value="{{ $offer->key }}" required>
-                                                                <p style="color: red;"> @error('key') {{ $message }} @enderror </p>
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="offerEditModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Edit Offer</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
+                                                            <div class="modal-body">
+                                                                <form action="{{ route('dashboard.offerEdit', $offer->offer_id) }}" method="POST" id="offer_edit_form">  
+                                                                    @csrf
+                                                                    <input type="hidden" name="_method" value="PUT">
+                                                                    @method('PATCH')
 
-                                                            <div class="mb-3">
-                                                                <label for="adds_text" class="form-label">Adds text</label>
-                                                                <input type="text" class="form-control" id="adds_text" name="adds_text" value="{{ $offer->adds_text }}" required>
-                                                                <p style="color: red;"> @error('adds_text') {{ $message }} @enderror </p>
+                                                                    <div class="mb-3 mt-2">
+                                                                        <label for="key" class="form-label">Key</label>
+                                                                        <input type="text" class="form-control" id="key" name="key" value="{{ $offer->key }}" required>
+                                                                        <p style="color: red;"> @error('key') {{ $message }} @enderror </p>
+                                                                    </div>
+
+                                                                    <div class="mb-3">
+                                                                        <label for="adds_text" class="form-label">Adds text</label>
+                                                                        <input type="text" class="form-control" id="adds_text" name="adds_text" value="{{ $offer->adds_text }}" required>
+                                                                        <p style="color: red;"> @error('adds_text') {{ $message }} @enderror </p>
+                                                                    </div>
+
+                                                                    <div class="mb-3">
+                                                                        <label for="bid" class="form-label">Bid</label>
+                                                                        <input type="number" class="form-control" id="bid" name="bid" value="{{ $offer->bid }}" required>
+                                                                        <p style="color: red;"> @error('bid') {{ $message }} @enderror </p>
+                                                                    </div>
+
+                                                                    <div class="mb-3">
+                                                                        <label for="comment" class="form-label">Comment</label>
+                                                                        <textarea class="form-control" id="comment" name="comment" required>{{ $offer->comment }}</textarea>
+                                                                        <p style="color: red;"> @error('comment') {{ $message }} @enderror </p>
+                                                                    </div>
+                                                                </form>
                                                             </div>
-
-                                                            <div class="mb-3">
-                                                                <label for="bid" class="form-label">Bid</label>
-                                                                <input type="number" class="form-control" id="bid" name="bid" value="{{ $offer->bid }}" required>
-                                                                <p style="color: red;"> @error('bid') {{ $message }} @enderror </p>
+                                                            <div class="modal-footer">
+                                                                <button type="submit" class="btn btn-outline-primary" form="offer_edit_form">Update</button>
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                             </div>
-
-                                                            <div class="mb-3">
-                                                                <label for="comment" class="form-label">Comment</label>
-                                                                <textarea class="form-control" id="comment" name="comment" required>{{ $offer->comment }}</textarea>
-                                                                <p style="color: red;"> @error('comment') {{ $message }} @enderror </p>
-                                                            </div>
-
-                                                            <button type="submit" class="btn btn-primary">Update</button>
-                                                        </form>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-outline-secondary" id="{{ $key + 1 }}" onclick="closeM(this.id)">Close</button>
                                                         </div>
                                                     </div>
                                                 </div>

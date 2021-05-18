@@ -219,128 +219,142 @@
                                     <td>
                                         <div style="width: 100%; display: flex;">
                                             <!-- Work modal -->
-                                            <button class="btn btn-outline-secondary ml-1" style="width: 90px;" id="{{ $key + 1 }}" onclick="modalCaseWork(this.id)">Work</button>
-                                            
-                                            <div id="myModalCaseWork{{ $key + 1 }}" class="modalnew">
-                                                <div class="modal-contentnew" style="margin-top: 10%;">
-                                                    <div class="modal-header" style="width: 100% !important;">
-                                                        <h5 class="modal-title" style="color: grey;">Change ststus</h5>
-                                                        <button type="button" class="btn-close" id="{{ $key + 1 }}" onclick="closeCaseWorkModalX(this.id)"></button>
-                                                    </div>
+                                            <button type="button" class="btn btn-outline-secondary ml-1" style="width: 90px;" data-bs-toggle="modal" data-bs-target="#caseWorkModal{{$key}}">
+                                                Work
+                                            </button>
 
-                                                    <div class="modal-body">
-                                                    <p style="font-size: 24px;">Are you sure you want to change ststus (Work)? </p>
-                                                    </div>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="caseWorkModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Change ststus</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p style="font-size: 24px;">Are you sure you want to change ststus (Work)? </p>
+                                                            <form action="{{ route('dashboard.status', $accountOffer->accountoffer_id) }}" id="case_work_form{{$key}}" method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="_method" value="PATCH">
+                                                                @method('PATCH')
 
-                                                    <div class="modal-footer">
-                                                        <form action="{{ route('dashboard.status', $accountOffer->accountoffer_id) }}" method="POST">
-                                                            @csrf
-                                                            <input type="hidden" name="_method" value="PATCH">
-                                                            @method('PATCH')
-
-                                                            <div>
-                                                                <input type="hidden" class="form-control" id="status" name="status" value="work">
-                                                            </div>
-                                                            <button type="submit" class="btn btn-outline-secondary" style="width: 90px;">Work</button>
-                                                        </form>
-                                                        <button type="button" class="btn btn-outline-secondary" id="{{ $key + 1 }}" onclick="closeCaseWorkModal(this.id)">Close</button>
+                                                                <div>
+                                                                    <input type="hidden" class="form-control" id="status" name="status" value="work">
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="submit" class="btn btn-outline-secondary" style="width: 90px;" form="case_work_form{{$key}}">Work</button>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <!-- End Work modal -->
 
-                                            <!-- Billing modal -->
-                                            <button class="btn btn-outline-warning ml-1" style="width: 90px;" id="{{ $key + 1 }}" onclick="modalReview(this.id)">Review</button>
-                                            
-                                            <div id="myModalReview{{ $key + 1 }}" class="modalnew">
-                                                <div class="modal-contentnew" style="margin-top: 10%;">
-                                                    <div class="modal-header" style="width: 100% !important;">
-                                                        <h5 class="modal-title" style="color: #FFCA2C;">Change ststus</h5>
-                                                        <button type="button" class="btn-close" id="{{ $key + 1 }}" onclick="closeReviewModalX(this.id)"></button>
-                                                    </div>
+                                            <!-- Review modal -->
+                                            <button type="button" class="btn btn-outline-warning ml-1" style="width: 90px;" data-bs-toggle="modal" data-bs-target="#caseReviewModal{{$key}}">
+                                                Review
+                                            </button>
 
-                                                    <div class="modal-body">
-                                                    <p style="font-size: 24px;">Are you sure you want to change ststus (Rewiew)? </p>
-                                                    </div>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="caseReviewModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Change ststus</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p style="font-size: 24px;">Are you sure you want to change ststus (Rewiew)? </p>
+                                                            <form action="{{ route('dashboard.status', $accountOffer->accountoffer_id) }}" id="case_review_form{{$key}}" method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="_method" value="PATCH">
+                                                                @method('PATCH')
 
-                                                    <div class="modal-footer">
-                                                        <form action="{{ route('dashboard.status', $accountOffer->accountoffer_id) }}" method="POST">
-                                                            @csrf
-                                                            <input type="hidden" name="_method" value="PATCH">
-                                                            @method('PATCH')
-
-                                                            <div>
-                                                                <input type="hidden" class="form-control" id="status" name="status" value="review">
-                                                            </div>
-                                                            <button type="sumbit" class="btn btn-outline-warning ml-1" style="width: 90px;">Review</button> <br>
-                                                        </form>
-                                                        <button type="button" class="btn btn-outline-secondary" id="{{ $key + 1 }}" onclick="closeReviewModal(this.id)">Close</button>
+                                                                <div>
+                                                                    <input type="hidden" class="form-control" id="status" name="status" value="review">
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="sumbit" class="btn btn-outline-warning ml-1" style="width: 90px;" form="case_review_form{{$key}}">Review</button> <br>
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!-- End Billing modal -->
+                                            <!-- End Review modal -->
                                         </div>
 
                                         <div style="width: 100%; display: flex;" >
+
                                             <!-- Billing modal -->
-                                            <button class="btn btn-outline-success mt-2 ml-1" style="width: 90px;" id="{{ $key + 1 }}" onclick="modalBilling(this.id)">Billing</button>
-                                            
-                                            <div id="myModalBilling{{ $key + 1 }}" class="modalnew">
-                                                <div class="modal-contentnew" style="margin-top: 10%;">
-                                                    <div class="modal-header" style="width: 100% !important;">
-                                                        <h5 class="modal-title" style="color: green;">Change ststus</h5>
-                                                        <button type="button" class="btn-close" id="{{ $key + 1 }}" onclick="closeBillingModalX(this.id)"></button>
-                                                    </div>
+                                            <button type="button" class="btn btn-outline-success mt-2 ml-1" style="width: 90px;" data-bs-toggle="modal" data-bs-target="#caseBillingModal{{$key}}">
+                                                Billing
+                                            </button>
 
-                                                    <div class="modal-body">
-                                                    <p style="font-size: 24px;">Are you sure you want to change ststus (Billing)? </p>
-                                                    </div>
-
-                                                    <div class="modal-footer">
-                                                        <form action="{{ route('dashboard.status', $accountOffer->accountoffer_id) }}" method="POST">
-                                                            @csrf
-                                                            <input type="hidden" name="_method" value="PATCH">
-                                                            @method('PATCH')
-
-                                                            <div>
-                                                                <input type="hidden" class="form-control" id="status" name="status" value="billing">
-                                                            </div>
-                                                            <button type="submit" class="btn btn-outline-success mr-1" style="width: 90px;">Billing</button>
-                                                        </form>
-                                                        <button type="button" class="btn btn-outline-secondary" id="{{ $key + 1 }}" onclick="closeBillingModal(this.id)">Close</button>
-                                                    </div>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="caseBillingModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Change ststus</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
+                                                <div class="modal-body">
+                                                    <p style="font-size: 24px;">Are you sure you want to change ststus (Billing)? </p>
+                                                    <form action="{{ route('dashboard.status', $accountOffer->accountoffer_id) }}" id="case_billing_form{{$key}}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="_method" value="PATCH">
+                                                        @method('PATCH')
+
+                                                        <div>
+                                                            <input type="hidden" class="form-control" id="status" name="status" value="billing">
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-outline-success mr-1" style="width: 90px;" form="case_billing_form{{$key}}">Billing</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                                </div>
+                                                </div>
+                                            </div>
                                             </div>
                                             <!-- End Billing modal -->
 
                                             <!-- Suspend modal -->
-                                            <button class="btn btn-outline-danger mt-2 ml-1" style="width: 90px;" id="{{ $key + 1 }}" onclick="modalSuspend(this.id)">Suspend</button>
-                                            
-                                            <div id="myModalSuspend{{ $key + 1 }}" class="modalnew">
-                                                <div class="modal-contentnew" style="margin-top: 10%;">
-                                                    <div class="modal-header" style="width: 100% !important;">
-                                                        <h5 class="modal-title" style="color: red;">Suspend</h5>
-                                                        <button type="button" class="btn-close" id="{{ $key + 1 }}" onclick="closeSuspendModalX(this.id)"></button>
-                                                    </div>
+                                            <button type="button" class="btn btn-outline-danger mt-2 ml-1"  style="width: 90px;" data-bs-toggle="modal" data-bs-target="#caseSuspendModal{{$key}}">
+                                                Suspend
+                                            </button>
 
-                                                    <div class="modal-body">
-                                                    <p style="font-size: 24px;">Are you sure you want to suspend account?</p>
-                                                    </div>
-
-                                                    <div class="modal-footer">
-                                                        <form action="{{ route('dashboard.suspend', $accountOffer->accountoffer_id) }}" method="POST">
-                                                            @csrf
-                                                            <input type="hidden" name="_method" value="PUT">
-                                                            @method('PUT')
-
-                                                            <div>
-                                                                <input type="hidden" class="form-control" id="status" name="status" value="suspend">
-                                                            </div>
-                                                            <button type="submit" class="btn btn-outline-danger">Suspend</button>
-                                                        </form>
-                                                        <button type="button" class="btn btn-outline-secondary" id="{{ $key + 1 }}" onclick="closeSuspendModal(this.id)">Close</button>
-                                                    </div>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="caseSuspendModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Suspend</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
+                                                <div class="modal-body">
+                                                    <p style="font-size: 24px;">Are you sure you want to suspend account?</p>
+                                                    <form action="{{ route('dashboard.suspend', $accountOffer->accountoffer_id) }}" id="case_suspend_form{{$key}}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="_method" value="PUT">
+                                                        @method('PUT')
+
+                                                        <div>
+                                                            <input type="hidden" class="form-control" id="status" name="status" value="suspend">
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="submit" class="btn btn-outline-danger" form="case_suspend_form{{$key}}">Suspend</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                                </div>
+                                            </div>
                                             </div>
                                             <!-- End Suspend modal -->
                                         </div>

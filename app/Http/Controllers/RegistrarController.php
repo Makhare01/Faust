@@ -23,7 +23,7 @@ class RegistrarController extends Controller
         return redirect('/dashboard/accountsList');
     }
 
-    public function accountsList(Request $request) {
+    public function accountsList() {
         include(app_path() . '/functions/converter.php');
 
         $users = User::all();
@@ -97,10 +97,13 @@ class RegistrarController extends Controller
             'comment' => ['string', "nullable"],
         ]);
 
+        $Acc_number = 0;
         if(Account::whereDate('updated_at', Carbon::today())->where('country_code', $data['country_code'])->exists()) {
             $last_account_for_accountNumber = Account::whereDate('updated_at', Carbon::today())->where('country_code', $data['country_code'])->get();
-            $acc_index = count($last_account_for_accountNumber)-1;
-            $Acc_number = $last_account_for_accountNumber[$acc_index]->account_number + 1;
+            foreach($last_account_for_accountNumber as $key => $value):
+                if($Acc_number < $value->account_number) $Acc_number = $value->account_number;
+            endforeach;
+            $Acc_number++;
         } else $Acc_number = 1;
         
         $account_name = converter($short_country_code).'-'.strtoupper($short_first_name[0]).strtoupper($short_last_name[0]).'-'.$day.$month.'-'.$Acc_number.'/'.$data['account_type'];
@@ -130,7 +133,6 @@ class RegistrarController extends Controller
 
         return redirect('/dashboard/accountsList');
     }
-
 
     public function accountDestroy($id) {
         $account = Account::findOrFail($id);
@@ -168,10 +170,13 @@ class RegistrarController extends Controller
             'comment' => ['string', "nullable"],
         ]);
 
+        $Acc_number = 0;
         if(Account::whereDate('updated_at', Carbon::today())->where('country_code', $data['country_code'])->exists()) {
             $last_account_for_accountNumber = Account::whereDate('updated_at', Carbon::today())->where('country_code', $data['country_code'])->get();
-            $acc_index = count($last_account_for_accountNumber)-1;
-            $Acc_number = $last_account_for_accountNumber[$acc_index]->account_number + 1;
+            foreach($last_account_for_accountNumber as $key => $value):
+                if($Acc_number < $value->account_number) $Acc_number = $value->account_number;
+            endforeach;
+            $Acc_number++;
         } else $Acc_number = 1;
 
         $account_name = converter($short_country_code).'-'.strtoupper($short_first_name[0]).strtoupper($short_last_name[0]).'-'.$day.$month.'-'.$Acc_number.'/'.$data['account_type'];

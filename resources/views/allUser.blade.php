@@ -125,31 +125,31 @@
                                     <td>
                                         <div style="display: frex;">
                                             <!-- Delete modal -->
-                                            <button class="btn btn-outline-danger ml-1" id="{{ $key + 1 }}" onclick="modalUserDelete(this.id)">Delete</button>
-                                                    
-                                            <div id="myModalUserDelete{{ $key + 1 }}" class="modalnew">
-                                                <div class="modal-contentnew" style="margin-top: 10%;">
-                                                    <div class="modal-header" style="width: 100% !important;">
-                                                        <h5 class="modal-title" style="color: red;">Delete Offer</h5>
-                                                        <button type="button" class="btn-close" id="{{ $key + 1 }}" onclick="closeUserDeleteModalX(this.id)"></button>
-                                                    </div>
-
-                                                    <div class="modal-body">
-                                                    <p style="font-size: 24px;">Are you sure you want to delete offer? </p>
-                                                    </div>
-
-                                                    <div class="modal-footer">
-                                                        <form action="{{ route('dashboard.destroyUser', $user->id) }}" method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            @if($user->role_id == 'admin')
-                                                                <button class="btn btn-outline-danger" disabled>Delete</button>
-                                                            @else <button class="btn btn-outline-danger">Delete</button>
-                                                            @endif
-                                                        </form>
-                                                        <button type="button" class="btn btn-outline-secondary" id="{{ $key + 1 }}" onclick="closeUserDeleteModal(this.id)">Close</button>
-                                                    </div>
+                                            @if($user->role_id == 'admin')
+                                                <button type="button" class="btn btn-outline-danger ml-1" data-bs-toggle="modal" data-bs-target="#adminDeleteModal{{$key}}" disabled> Delete </button>
+                                            @else <button type="button" class="btn btn-outline-danger ml-1" data-bs-toggle="modal" data-bs-target="#adminDeleteModal{{$key}}"> Delete </button>
+                                            @endif
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="adminDeleteModal{{$key}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Delete User</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
+                                                <div class="modal-body">
+                                                    <p style="font-size: 24px;">Are you sure you want to delete offer? </p>
+                                                    <form action="{{ route('dashboard.destroyUser', $user->id) }}" id="admin_delete_user_form{{$key}}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-outline-danger" form="admin_delete_user_form{{$key}}">Delete</button>
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                </div>
+                                                </div>
+                                            </div>
                                             </div>
                                             <!-- End Delete modal -->
                                         </div>
