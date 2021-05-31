@@ -49,7 +49,7 @@ Route::group(['middleware' => ['auth', 'role:superadmin']], function() {
     Route::put('/dashboard/offersList', 'App\Http\Controllers\SuperadminController@changeRows')->name('dashboard.changeRows');
     Route::delete('/dashboard/offersList/{id}', 'App\Http\Controllers\SuperadminController@offerDestroy')->name('dashboard.offerDestroy');
     Route::patch('/dashboard/offersList/{id}', 'App\Http\Controllers\SuperadminController@offerEdit')->name('dashboard.offerEdit');
-    Route::put('/dashboard/offersList/{id1}', 'App\Http\Controllers\SuperadminController@offerStatus')->name('dashboard.offerStatus');
+    Route::put('/dashboard/offersList/{id}', 'App\Http\Controllers\SuperadminController@offerStatus')->name('dashboard.offerStatus');
 });
 
 // for registrar

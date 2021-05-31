@@ -89,7 +89,10 @@ class RollerController extends Controller
     }
 
     public function status($id) {
-        Accountoffer::where("accountoffer_id", $id)->update([
+
+        $account_offer = Accountoffer::findOrFail($id);
+        
+        $account_offer->update([
             'status' => request('status'),
         ]);
 
@@ -97,12 +100,16 @@ class RollerController extends Controller
     }
 
     public function suspend($id) {
-        Accountoffer::where("accountoffer_id", $id)->update([
-            'status' => request('status'),
-        ]);
+        // Accountoffer::where("accountoffer_id", $id)->update([
+        //     'status' => request('status'),
+        // ]);
+
+        $suspend = new Suspend();
 
         $accountOffer = Accountoffer::where("accountoffer_id", $id)->first();
-        $suspend = new Suspend();
+        $accountOffer->update([
+            'status' => request('status'),
+        ]);
 
         $suspend->account_id = $accountOffer->account_id;
         $suspend->offer_id = $accountOffer->offer_id;

@@ -189,7 +189,9 @@ class RegistrarController extends Controller
 
         if(!array_key_exists('ssh_pwd',$data)) $data['ssh_pwd'] = null;
 
-        Account::where("id", $id)->update([
+        $account = Account::findOrFail($id);
+        // Account::where('id', $id)
+        $account->update([
             "account_name" => $account_name,
             "account_number" => $Acc_number,
             "account_type" => $data['account_type'],
@@ -212,7 +214,14 @@ class RegistrarController extends Controller
     }
 
     public function accountStatus($id) {
-        Account::where("id", $id)->update([
+        // Account::where("id", $id)->update([
+        //     "status" => 'ready',
+        //     "company_created_date" => Carbon::now()->toDateTimeString(),
+        // ]);
+
+        $account = Account::findOrFail($id);
+
+        $account->update([
             "status" => 'ready',
             "company_created_date" => Carbon::now()->toDateTimeString(),
         ]);

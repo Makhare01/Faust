@@ -247,7 +247,7 @@
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <form action="{{ route('dashboard.offerEdit', $offer->offer_id) }}" method="POST" id="offer_edit_form">  
+                                                                <form action="{{ route('dashboard.offerEdit', $offer->offer_id) }}" method="POST" id="offer_edit_form{{$key}}"> 
                                                                     @csrf
                                                                     <input type="hidden" name="_method" value="PUT">
                                                                     @method('PATCH')
@@ -278,7 +278,7 @@
                                                                 </form>
                                                             </div>
                                                             <div class="modal-footer">
-                                                                <button type="submit" class="btn btn-outline-primary" form="offer_edit_form">Update</button>
+                                                                <button type="submit" class="btn btn-outline-primary" form="offer_edit_form{{$key}}">Update</button>
                                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                             </div>
                                                         </div>

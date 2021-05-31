@@ -152,6 +152,7 @@ function enableStateFunc() {
     if (selectedValue == "United States of America") {
         disable.style.pointerEvents = "all";
         disable.style.background = "#FFFFFF";
+        disable.value = null;
     } else {
         disable.style.pointerEvents = "none";
         disable.style.background = "#EFF1F3";

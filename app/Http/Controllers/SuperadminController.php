@@ -86,7 +86,11 @@ class SuperadminController extends Controller
             'comment' => ['string', 'nullable'],
         ]);
 
-        Offer::where("offer_id", $id)->update([
+        $offer = Offer::findOrFail($id);
+
+        // Offer::where("offer_id", $id)
+
+        $offer->update([
             "key" => $data['key'],
             "adds_text" => $data['adds_text'],
             "bid" => $data['bid'],
@@ -96,8 +100,14 @@ class SuperadminController extends Controller
         return redirect('/dashboard/offersList');
     }
 
-    public function offerStatus($id1) {
-        Offer::where("offer_id", $id1)->update([
+    public function offerStatus($id) {
+        // Offer::where("offer_id", $id)->update([
+        //     "status" => request('status'),
+        // ]);
+
+        $offer = Offer::findOrFail($id);
+
+        $offer->update([
             "status" => request('status'),
         ]);
 

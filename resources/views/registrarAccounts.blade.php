@@ -57,7 +57,7 @@
 
                             <div class="mb-3">
                                 <label for="state" class="form-label">State</label>
-                                <select style="pointer-events: none; background: #EFF1F3;" class="form-select" id="state" name="state">
+                                <select style="pointer-events: none; background: #EFF1F3;" class="form-select" id="state" name="state" required>
                                     <option selected value="N/A">N/A</option>
                                     @foreach($allStates as $state)
                                         <option value="{{$state}}">{{$state}}</option>
@@ -261,9 +261,8 @@
                                         <!-- End Ready modal -->
                                     </td>
                                     <td>
-                                        <div style="width: 100%; max-width: 80px; height: 100%;">
+                                        <div style="width: 100%; height: 100%;">
                                             <!-- Delete modal -->
-                                            <!-- Button trigger modal -->
                                             <button type="button" class="btn btn-outline-danger" style="width: 100%;" data-bs-toggle="modal" data-bs-target="#exampleDeleteModal{{$key}}">
                                                 Delete
                                             </button>

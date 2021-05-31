@@ -123,7 +123,7 @@
                                     <td> {{ $user->name }} </td>
                                     <td> {{ $user->role_id }} </td>
                                     <td>
-                                        <div style="display: frex;">
+                                        <div style="display: flex;">
                                             <!-- Delete modal -->
                                             @if($user->role_id == 'admin')
                                                 <button type="button" class="btn btn-outline-danger ml-1" data-bs-toggle="modal" data-bs-target="#adminDeleteModal{{$key}}" disabled> Delete </button>

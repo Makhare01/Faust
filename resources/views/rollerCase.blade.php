@@ -19,7 +19,7 @@
                             </div>
                             <div class="modal-body">
                                 <div class="rollerModalTables" style="display: flex;">
-                                    <div class="rollerModalTablesDiv" style="width: 50%; max-height: 250px; overflow-y: scroll;" class="mr-1">
+                                    <div class="rollerModalTablesDiv" style="width: 50%; max-height: 300px; overflow-y: scroll;" class="mr-1">
                                         <!-- Accounts Table -->
                                         <table class="table">
                                             <thead>
@@ -60,7 +60,7 @@
                                         </table>
                                     </div>
 
-                                    <div class="rollerModalTablesDiv1" style="width: 50%; max-height: 250px; overflow-y: scroll;" class="ml-1">
+                                    <div class="rollerModalTablesDiv1" style="width: 50%; max-height: 300px; overflow-y: scroll;" class="ml-1">
                                         <!-- Offers Table -->
                                         <table class="table">
                                             <thead>
@@ -89,7 +89,7 @@
                                     </div>
                                 </div>
 
-                                <form action="{{ route('dashboard.createCase') }}" class="mt-4" method="POST">
+                                <form action="{{ route('dashboard.createCase') }}" id="create_case_form" class="mt-4" method="POST">
                                     <h4 style="text-align: center;"> Case </h4>
                                     @csrf
                                     <table class="table">
@@ -112,11 +112,11 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <button type="submit" class="btn btn-outline-success">OK</button>
                                 </form>
                                 
                             </div>
                             <div class="modal-footer">
+                                <button type="submit" class="btn btn-outline-success" form="create_case_form">OK</button>
                                 <button type="button" class="btn btn-outline-secondary" onclick="Clear()">Clear</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             </div>
