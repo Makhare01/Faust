@@ -17,6 +17,14 @@
                                 <h5 class="modal-title" id="exampleModalLabel">Add</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
+                            <div class="dropdown mt-2" style="margin-left: 55px; width: 190px;">
+                                <select class="form-select" id="regar_select" aria-label="Default select example" onchange="initial_filter()">
+                                    <option value="all" selected>All</option>
+                                    @foreach($registrar_accounts as $registrar_account)
+                                        <option id="{{ $registrar_account->id }}" onclick="initial_filter(this.id)" value="{{ $registrar_account->id }}"> {{ $registrar_account->initials }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="modal-body">
                                 <div class="rollerModalTables" style="display: flex;">
                                     <div class="rollerModalTablesDiv" style="width: 50%; max-height: 300px; overflow-y: scroll;" class="mr-1">
@@ -33,9 +41,9 @@
                                             <tbody>
                                                 @foreach($accounts_ready as $key => $account)
                                                     @if($account->status == 'elected')
-                                                    <tr style="opacity: 0.5;">
+                                                    <tr style="opacity: 0.5;" class="account{{$account->user_created_id}} allCaseAccount">
                                                     @else
-                                                    <tr>
+                                                    <tr class="account{{$account->user_created_id}} allCaseAccount">
                                                     @endif
                                                         <th scope="row"> {{ $key + 1 }} </th>
                                                         <td id="accountId{{ $key + 1 }}" style="display: none;"> {{ $account->id }} </td>
@@ -75,7 +83,11 @@
                                                 @foreach($offers_valid as $key => $offer)
                                                     <tr>
                                                         <th scope="row"> {{ $key + 1 }} </th>
-                                                        <td id="offerId{{ $key + 1 }}" style="display: none;"> {{ $offer->offer_id }} </td>
+                                                        <td id="offerId{{ $key + 1 }}" style="display: none;">
+                                                            <pre>
+                                                                {{ $offer->offer_id }}
+                                                            <pre>
+                                                        </td>
                                                         <td id="offer{{ $key + 1 }}" data-toggle="tooltip" data-placement="left" title="Offer ID: {{ $offer->offer_id }}, Key: {{ $offer->key }}, Adds Text: {{ $offer->adds_text }}, Bid: {{ $offer->bid }}, Status: {{ $offer->status }}, Comment: {{ $offer->comment }}"> {{ $offer->adds_text }} </td>
                                                         <td>
                                                             <button id="{{ $key + 1 }}" type="button" class="btn btn-outline-success" onclick="addOffer(this.id)" >
@@ -171,18 +183,16 @@
                             </div>
                             @foreach($accountOffers as $key => $accountOffer)
                                 @if($accountOffer->status == "work")                
-                                    <tr style="border-bottom: solid 6px #6C757D;">
+                                    <tr style="border-bottom: solid 20px #198754;" >
                                 @elseif($accountOffer->status == "review")
-                                    <tr style="border-bottom: solid 6px #FFC107;">
+                                    <tr style="border-bottom: solid 20px #FFC107;">
                                 @elseif($accountOffer->status == "billing")
-                                    <tr style="border-bottom: solid 6px #198754;">
-                                @elseif($accountOffer->status == "suspend")
-                                    <tr style="border-bottom: solid 6px #DF4755;">
+                                    <tr style="border-bottom: solid 20px #0D6EFD;">
                                 @else <tr>
                                 @endif
                                     <th scope="row"> {{ $key + 1 }} </th>
 
-                                    <td>
+                                    <td style="width: 190px;">
                                         {{ $accountOffer->account }}
                                     </td>
                                     @foreach($accounts as $account)
@@ -197,8 +207,10 @@
                                         @endif
                                     @endforeach
                                     
-                                    <td>
-                                        {{ $accountOffer->offer }}
+                                    <td style="max-width: 200px;">
+                                        <pre>
+                                            {{ $accountOffer->offer }}
+                                        </pre>
                                     </td>
 
                                     @foreach($offers as $offer)
@@ -219,7 +231,7 @@
                                     <td>
                                         <div style="width: 100%; display: flex;">
                                             <!-- Work modal -->
-                                            <button type="button" class="btn btn-outline-secondary ml-1" style="width: 90px;" data-bs-toggle="modal" data-bs-target="#caseWorkModal{{$key}}">
+                                            <button type="button" class="btn btn-outline-success ml-1" style="width: 90px;" data-bs-toggle="modal" data-bs-target="#caseWorkModal{{$key}}">
                                                 Work
                                             </button>
 
@@ -244,7 +256,7 @@
                                                             </form>
                                                         </div>
                                                         <div class="modal-footer">
-                                                            <button type="submit" class="btn btn-outline-secondary" style="width: 90px;" form="case_work_form{{$key}}">Work</button>
+                                                            <button type="submit" class="btn btn-outline-success" style="width: 90px;" form="case_work_form{{$key}}">Work</button>
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                         </div>
                                                     </div>
@@ -290,7 +302,7 @@
                                         <div style="width: 100%; display: flex;" >
 
                                             <!-- Billing modal -->
-                                            <button type="button" class="btn btn-outline-success mt-2 ml-1" style="width: 90px;" data-bs-toggle="modal" data-bs-target="#caseBillingModal{{$key}}">
+                                            <button type="button" class="btn btn-outline-primary mt-2 ml-1" style="width: 90px;" data-bs-toggle="modal" data-bs-target="#caseBillingModal{{$key}}">
                                                 Billing
                                             </button>
 
@@ -315,7 +327,7 @@
                                                     </form>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-outline-success mr-1" style="width: 90px;" form="case_billing_form{{$key}}">Billing</button>
+                                                    <button type="submit" class="btn btn-outline-primary mr-1" style="width: 90px;" form="case_billing_form{{$key}}">Billing</button>
                                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                     <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
                                                 </div>

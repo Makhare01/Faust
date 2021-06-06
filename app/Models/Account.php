@@ -20,6 +20,9 @@ class Account extends Model
 
     protected $fillable = [
         'account_login',
+        'account_type',
+        'account_name',
+        'account_login',
         'account_pwd',
         'ssh_ip',
         'ssh_port',

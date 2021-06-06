@@ -32,7 +32,8 @@
 
                                     <div class="mb-3">
                                         <label for="adds_text" class="form-label">Adds text</label>
-                                        <input type="text" class="form-control" id="adds_text" name="adds_text" required>
+                                        <!-- <input type="text" class="form-control" id="adds_text" name="adds_text" required> -->
+                                        <textarea class="form-control" id="adds_text" name="adds_text" required></textarea>
                                         <p style="color: red;"> @error('adds_text') {{ $message }} @enderror </p>
                                     </div>
 
@@ -113,24 +114,24 @@
                             </div>
                             @foreach($offers as $key => $offer)
                                 @if($offer->status == 'valid')
-                                    <tr style="border-bottom: solid 4px #198754;">
+                                    <tr style="border-bottom: solid 8px #198754;">
                                 @elseif($offer->status == 'work')
-                                    <tr style="border-bottom: solid 4px #6C757D;">
-                                @else <tr style="border-bottom: solid 4px #6C757D;">
+                                    <tr style="border-bottom: solid 8px #6C757D;">
+                                @else <tr style="border-bottom: solid 8px #6C757D;">
                                 @endif
 
                                         <td> {{ $offer->offer_id }} </td>
                                         <td> {{ $offer->key  }} </td>
-                                        <td> {{ $offer->adds_text }} </td>
+                                        <td> <div style="max-width: 100$ !important;"> <pre class="adds_text_pre" style="font-size: 12pt;">{{ $offer->adds_text }} </pre> </div> </td>
                                         <td> {{ $offer->bid }} </td>
-                                        <td> {{ $offer->comment }} </td>
+                                        <td> <pre style="font-size: 12pt;">{{ $offer->comment }} </pre> </td>
 
                                         <td>
                                             <div style="display: flex; width: 100%; height: 100%;">
                                                 <!-- Valid modal -->
                                                 @if($offer->status == 'valid')
-                                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#offerValidModal{{$key}}" disabled>  Valid </button>
-                                                @else <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#offerValidModal{{$key}}">  Valid </button>
+                                                    <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#offerValidModal{{$key}}" disabled>  Active </button>
+                                                @else <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#offerValidModal{{$key}}">  Active </button>
                                                 @endif
                                                 
 
@@ -143,7 +144,7 @@
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <p style="font-size: 24px;">Are you sure you want to change status (valid)? </p>
+                                                                <p style="font-size: 24px;">Are you sure you want to change status (Active)? </p>
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <form action="{{ route('dashboard.offerStatus', $offer->offer_id) }}" method="POST">
@@ -154,7 +155,7 @@
                                                                     <div>
                                                                         <input type="hidden" class="form-control" id="status" name="status" value="valid">
                                                                     </div>
-                                                                    <button type="submit" class="btn btn-outline-success">Valid</button>
+                                                                    <button type="submit" class="btn btn-outline-success">Active</button>
                                                                 </form>
                                                                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                                                                 <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
@@ -166,8 +167,8 @@
 
                                                 <!-- Work modal -->
                                                 @if($offer->status == 'work')
-                                                    <button type="button" class="btn btn-outline-secondary ml-2" data-bs-toggle="modal" data-bs-target="#offerWorkModal{{$key}}" disabled> Work </button>
-                                                @else <button type="button" class="btn btn-outline-secondary ml-2" data-bs-toggle="modal" data-bs-target="#offerWorkModal{{$key}}"> Work </button>
+                                                    <button type="button" class="btn btn-outline-secondary ml-2" data-bs-toggle="modal" data-bs-target="#offerWorkModal{{$key}}" disabled> Inactive </button>
+                                                @else <button type="button" class="btn btn-outline-secondary ml-2" data-bs-toggle="modal" data-bs-target="#offerWorkModal{{$key}}"> Inactive </button>
                                                 @endif                                                
 
                                                 <!-- Modal -->
@@ -179,7 +180,7 @@
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <p style="font-size: 24px;">Are you sure you want to change status (work)? </p>
+                                                        <p style="font-size: 24px;">Are you sure you want to change status (Inactive)? </p>
                                                     </div>
                                                     <div class="modal-footer">
                                                         <form action="{{ route('dashboard.offerStatus', $offer->offer_id) }}" method="POST" class="ml-2">
@@ -190,7 +191,7 @@
                                                             <div>
                                                                 <input type="hidden" class="form-control" id="status" name="status" value="work">
                                                             </div>
-                                                            <button type="submit" class="btn btn-outline-secondary">Work</button>
+                                                            <button type="submit" class="btn btn-outline-secondary">Inactive</button>
                                                         </form>
                                                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                                                         <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
@@ -260,7 +261,7 @@
 
                                                                     <div class="mb-3">
                                                                         <label for="adds_text" class="form-label">Adds text</label>
-                                                                        <input type="text" class="form-control" id="adds_text" name="adds_text" value="{{ $offer->adds_text }}" required>
+                                                                        <textarea class="form-control" id="adds_text" name="adds_text" value="{{ $offer->adds_text }}" required>{{ $offer->adds_text }}</textarea>
                                                                         <p style="color: red;"> @error('adds_text') {{ $message }} @enderror </p>
                                                                     </div>
 

@@ -38,6 +38,9 @@ Route::group(['middleware' => ['auth', 'role:roller']], function() {
     Route::put('/dashboard/cases', 'App\Http\Controllers\RollerController@Rows')->name('dashboard.rows');
     Route::patch('/dashboard/cases/{id}', 'App\Http\Controllers\RollerController@status')->name('dashboard.status');
     Route::put('/dashboard/cases/{id}', 'App\Http\Controllers\RollerController@suspend')->name('dashboard.suspend');
+
+    Route::get('/dashboard/suspends', 'App\Http\Controllers\RollerController@suspendCases')->name('dashboard.suspendCases');
+    Route::put('/dashboard/suspends', 'App\Http\Controllers\RollerController@suspendCasesRow')->name('dashboard.suspendCasesRow');
 });
 
 

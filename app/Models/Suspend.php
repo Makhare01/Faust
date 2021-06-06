@@ -9,4 +9,8 @@ class Suspend extends Model
 {
     use HasFactory;
     public $primaryKey  = 'id';
+
+    protected $fillable = [
+        'rows',
+    ];
 }

@@ -105,8 +105,11 @@ class RegistrarController extends Controller
             endforeach;
             $Acc_number++;
         } else $Acc_number = 1;
+
+        // dd(Auth::user()->initials);
+        // exit;
         
-        $account_name = converter($short_country_code).'-'.strtoupper($short_first_name[0]).strtoupper($short_last_name[0]).'-'.$day.$month.'-'.$Acc_number.'/'.$data['account_type'];
+        $account_name = converter($short_country_code).'-'.Auth::user()->initials.'-'.$day.$month.'-'.$Acc_number.'/'.$data['account_type'];
 
         $account->account_number = $Acc_number;
         $account->account_name = $account_name;
@@ -115,10 +118,10 @@ class RegistrarController extends Controller
         $account->account_login = $data['account_login']; 
         $account->account_pwd = $data['account_pwd'];
 
-        if(!array_key_exists("ssh_ip",$data)) $data['ssh_ip'] = null;
-        if(!array_key_exists("ssh_port",$data)) $data['ssh_port'] = null;
-        if(!array_key_exists("ssh_login",$data)) $data['ssh_login'] = null;
-        if(!array_key_exists('ssh_pwd',$data)) $data['ssh_pwd'] = null;
+        if(array_key_exists("ssh_ip",$data)) $account->ssh_ip =  $data['ssh_ip'];
+        if(array_key_exists("ssh_port",$data)) $account->ssh_port =  $data['ssh_port'];
+        if(array_key_exists("ssh_login",$data)) $account->ssh_login =  $data['ssh_login'];
+        if(array_key_exists('ssh_pwd',$data)) $account->ssh_pwd = $data['ssh_pwd'];
 
         $account->country = $data['country_code'];
         $account->city = $data['city'];
@@ -179,7 +182,7 @@ class RegistrarController extends Controller
             $Acc_number++;
         } else $Acc_number = 1;
 
-        $account_name = converter($short_country_code).'-'.strtoupper($short_first_name[0]).strtoupper($short_last_name[0]).'-'.$day.$month.'-'.$Acc_number.'/'.$data['account_type'];
+        $account_name = converter($short_country_code).'-'.Auth::user()->initials.'-'.$day.$month.'-'.$Acc_number.'/'.$data['account_type'];
 
         if(!array_key_exists("ssh_ip",$data)) $data['ssh_ip'] = null;
 

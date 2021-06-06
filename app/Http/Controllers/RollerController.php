@@ -15,7 +15,7 @@ class RollerController extends Controller
 {
     //roller functions
 
-    public function Rows() {;
+    public function Rows() {
         Accountoffer::where("user_id", Auth::user()->id)->update([
             "rows" => request('pages'),
         ]);
@@ -36,6 +36,7 @@ class RollerController extends Controller
         $accounts_ready = Account::where('status', 'ready')->orWhere('status', 'elected')->get();
         $users = User::all();
         $accountOffers_all = Accountoffer::all();
+        $registrar_accounts = User::where("role_id", "registrar")->get();
 
         // $accountOffers = Accountoffer::where('user_id', Auth::user()->id)->where('status', '<>', 'suspend')->paginate($paginate_row);
         
@@ -61,6 +62,7 @@ class RollerController extends Controller
             'offers' => $offers,
             'offers_valid' => $offers_valid,
             'accounts' => $accounts,
+            'registrar_accounts' => $registrar_accounts,
             'accounts_ready' => $accounts_ready,
             'accountOffers_all' => $accountOffers_all,
             'accountOffers' => $accountOffers,
@@ -121,5 +123,63 @@ class RollerController extends Controller
         $suspend->save();
 
         return redirect('/dashboard/cases');
+    }
+
+    // ----------------------------------------------------------------------------
+
+    public function suspendCasesRow() {
+        $suspends = Suspend::all();
+
+        foreach ($suspends as $key => $suspend) {
+            $suspend->update([
+                "rows" => request('suspendPages'),
+            ]);
+        }
+
+        return redirect('/dashboard/suspends');
+
+    }
+
+    public function suspendCases() {
+        include(app_path() . '/functions/converter.php');
+
+        $suspendCases_for_pagination = Suspend::first();
+        if($suspendCases_for_pagination) $paginate_row = $suspendCases_for_pagination->rows;
+        else $paginate_row = 5;
+
+        $offers = Offer::all();
+        $offers_valid = Offer::where('status', "valid")->get();
+        $accounts = Account::all();
+        $accounts_ready = Account::where('status', 'ready')->orWhere('status', 'elected')->get();
+        $users = User::all();
+        $accountOffers_all = Suspend::all();
+
+        // $accountOffers = Accountoffer::where('user_id', Auth::user()->id)->where('status', '<>', 'suspend')->paginate($paginate_row);
+        
+        if(array_key_exists('suspendCase_search', $_GET) && $_GET['suspendCase_search'] == "") $search_item_text = "Search";
+        else if(array_key_exists('suspendCase_search', $_GET)) $search_item_text = $_GET['suspendCase_search'];
+        else $search_item_text = "Search";
+
+        if(array_key_exists('suspendCase_search', $_GET) && $_GET['suspendCase_search'] != "") {
+                $suspendCases = Suspend::Where(function($query) {
+                                                    $query->where('account', 'LIKE', "%".$_GET['suspendCase_search']."%")
+                                                    ->orWhere('offer', 'LIKE', "%".$_GET['suspendCase_search']."%")
+                                                    ->orWhere('status', 'LIKE', "%".$_GET['suspendCase_search']."%");
+                                                })->paginate($paginate_row);
+        } else $suspendCases = Suspend::paginate($paginate_row);
+
+        $existCase = true;
+
+        return view('suspendCases', [
+            'offers' => $offers,
+            'offers_valid' => $offers_valid,
+            'accounts' => $accounts,
+            'accounts_ready' => $accounts_ready,
+            'accountOffers_all' => $accountOffers_all,
+            'suspendCases' => $suspendCases,
+            'search_item_text' => $search_item_text,
+            'paginate_row' => $paginate_row,
+            'existCase' => $existCase,
+        ]);
     }
 }

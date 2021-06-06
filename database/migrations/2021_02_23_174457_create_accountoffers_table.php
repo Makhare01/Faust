@@ -19,7 +19,7 @@ class CreateAccountoffersTable extends Migration
             $table->bigInteger('offer_id');
             $table->bigInteger('user_id');
             $table->string('account');
-            $table->string('offer');
+            $table->text('offer');
             $table->integer('rows')->default(25);
 
             $table->string('status')->nullable();

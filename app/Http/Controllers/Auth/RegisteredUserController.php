@@ -37,6 +37,7 @@ class RegisteredUserController extends Controller
             'last_name' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'role_id' => 'required|max:255',
+            // 'initials' => 'string|max:2',
             // 'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:8',
         ]);
@@ -50,14 +51,25 @@ class RegisteredUserController extends Controller
         //     'password' => Hash::make($request->password),
         // ]));
 
-        $user = User::create([
-            'name' => $request->name,
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'role_id' => $request->role_id,
-            // 'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        if($request->role_id == 'registrar') {
+            $user = User::create([
+                'name' => $request->name,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'role_id' => $request->role_id,
+                'initials' => strtoupper($request->initials),
+                'password' => Hash::make($request->password),
+            ]);
+        } else {
+            $user = User::create([
+                'name' => $request->name,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'role_id' => $request->role_id,
+                // 'initials' => $request->initials,
+                'password' => Hash::make($request->password),
+            ]);
+        } 
 
         $user->attachRole($request->role_id); 
         event(new Registered($user));

@@ -38,6 +38,11 @@
                             {{ __('Roller Table') }}
                         </x-nav-link>
                     </div>
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('dashboard.suspendCases')" :active="request()->routeIs('dashboard.suspendCases')" style="text-decoration: none">
+                            {{ __('Suspends Table') }}
+                        </x-nav-link>
+                    </div>
                 @endif
 
                 @if (Auth::user()->hasRole('superadmin'))

@@ -16,7 +16,7 @@ class CreateOffersTable extends Migration
         Schema::create('offers', function (Blueprint $table) {
             $table->increments('offer_id');
             $table->longText('key')->unique();
-            $table->string('adds_text');
+            $table->text('adds_text');
             $table->decimal('bid');
             $table->string('status')->default('in progress');
             $table->longText('comment')->nullable();

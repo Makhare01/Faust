@@ -195,3 +195,37 @@ function closeUserDeleteModal(id) {
     var modal = document.getElementById("myModalUserDelete" + id);
     modal.style.display = "none";
 }
+
+function Initials() {
+    var role = document.getElementById("role_id").value;
+
+    if (role == "registrar") {
+        document.getElementById("initials_div").style.display = "block";
+        document.getElementById("initials").required = true;
+        document.getElementById("initials").disabled = false;
+    } else {
+        document.getElementById("initials_div").style.display = "none";
+        document.getElementById("initials").required = false;
+        document.getElementById("initials").disabled = true;
+    }
+}
+
+function initial_filter() {
+    let x = document.getElementById("regar_select").value;
+    let choosenAccount = document.getElementsByClassName("account" + x);
+    let y = document.getElementsByClassName("allCaseAccount");
+
+    for (let i = 0; i < y.length; i++) {
+        y[i].style.display = "none";
+    }
+
+    if (x == "all") {
+        for (let i = 0; i < y.length; i++) {
+            y[i].style.display = "table-row";
+        }
+    } else {
+        for (let i = 0; i < choosenAccount.length; i++) {
+            choosenAccount[i].style.display = "table-row";
+        }
+    }
+}

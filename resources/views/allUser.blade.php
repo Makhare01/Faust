@@ -47,7 +47,8 @@
                                 <!-- Select Option Rol type -->
                                 <div class="mt-4">
                                     <x-label for="role_id" value="{{ __('Role') }}" />
-                                    <select name="role_id" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm">
+                                    <select id="role_id" name="role_id" class="block mt-1 w-full border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm" onchange="Initials()" required>
+                                        <option default value="">Choose a role</option>
                                         <option value="registrar">registrar</option>
                                         <option value="superadmin">superadmin</option>
                                         <option value="roller">roller</option>
@@ -55,12 +56,12 @@
                                     </select>
                                 </div>
 
-                                <!-- Email Address
-                                <div class="mt-4">
-                                    <x-label for="email" :value="__('Email')" />
+                                <!-- Initials -->
+                                <div class="mt-4" id="initials_div" style="display: none;">
+                                    <x-label for="initials" :value="__('Initials')" />
 
-                                    <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
-                                </div> -->
+                                    <x-input id="initials" class="block mt-1 w-full" type="text" name="initials" maxlength="2" :value="old('Initials')" />
+                                </div>
 
                                 <!-- Password -->
                                 <div class="mt-4">
@@ -105,7 +106,7 @@
                             <th scope="col">ID</th>
                             <th scope="col">First Name</th>
                             <th scope="col">Last Name</th>
-                            <!-- <th scope="col">Initials</th> -->
+                            <th scope="col">Initials</th>
                             <th scope="col">Name</th>
                             <th scope="col">Role</th>
                             <th scope="col">Actions</th>
@@ -119,6 +120,10 @@
                                     <td> {{ $user->id }} </td>
                                     <td> {{ $user->first_name }} </td>
                                     <td> {{ $user->last_name  }} </td>
+                                    @if($user->initials)
+                                        <td> {{ $user->initials  }} </td>
+                                    @else <td>Null</td>
+                                    @endif
                                     <!-- <td> {{ strtoupper($user->first_name[0]) }}{{ strtoupper($user->last_name[0])   }} </td> -->
                                     <td> {{ $user->name }} </td>
                                     <td> {{ $user->role_id }} </td>

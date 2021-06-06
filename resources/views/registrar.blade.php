@@ -13,6 +13,7 @@
                     <p>First Name: <b> {{ Auth::user()->first_name }} </b> </p>
                     <p>Last Name: <b> {{ Auth::user()->last_name }} </b> </p>
                     <p>Name: <b> {{ Auth::user()->name }} </b> </p>
+                    <p>Name: <b> {{ Auth::user()->initials }} </b> </p>
                     <p>Role: <b> {{ Auth::user()->role_id }} </b> </p>
                 </div>
             </div>
