@@ -7,6 +7,8 @@
 
         <title>{{ config('app.name', 'Faust') }}</title>
 
+        @livewireStyles
+
         <!-- Favicon -->
         <link rel="shortcut icon" href="/img/f.png" type="image/x-icon">
 
@@ -50,5 +52,10 @@
                 {{ $slot }}
             </main>
         </div>
+
+        
+
+        @livewireScripts
+        <livewire:scripts />
     </body>
 </html>

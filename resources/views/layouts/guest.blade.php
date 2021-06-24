@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
+        @livewireStyles
+
         <title>Faust</title>
 
         <!-- Favicon -->
@@ -24,5 +26,6 @@
         <div class="font-sans text-gray-900 antialiased">
             {{ $slot }}
         </div>
+        @livewireScripts
     </body>
 </html>

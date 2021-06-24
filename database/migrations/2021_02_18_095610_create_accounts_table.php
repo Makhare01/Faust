@@ -22,6 +22,7 @@ class CreateAccountsTable extends Migration
             $table->string('user_created_id');   
             $table->string('account_login');
             $table->string('account_pwd');
+            $table->string('sort')->default('ASC');
             
             $table->string('ssh_ip')->nullable();
             $table->float('ssh_port')->nullable();

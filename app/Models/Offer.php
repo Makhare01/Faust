@@ -24,5 +24,6 @@ class Offer extends Model
         'bid',
         'comment',
         'status',
+        'sort',
     ];
 }

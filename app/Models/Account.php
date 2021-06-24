@@ -35,6 +35,7 @@ class Account extends Model
         'status',
         'country_code',
         'country',
-        'company_created_date'
+        'company_created_date',
+        'sort',
     ];
 }

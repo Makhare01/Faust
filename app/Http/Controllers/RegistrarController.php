@@ -26,43 +26,8 @@ class RegistrarController extends Controller
     public function accountsList() {
         include(app_path() . '/functions/converter.php');
 
-        $users = User::all();
-
-        if(array_key_exists('account_search', $_GET) && $_GET['account_search'] == "") $search_item_text = "Search";
-        else if(array_key_exists('account_search', $_GET)) $search_item_text = $_GET['account_search'];
-        else $search_item_text = "Search";
-
-        $account_for_pagination = Account::where('user_created_id', Auth::user()->id)->first();
-        if($account_for_pagination) $paginate_row = $account_for_pagination->rows;
-        else $paginate_row = 5;
-        
-        if(array_key_exists('account_search', $_GET) && $_GET['account_search'] != "") {
-            $auth_user_accounts = Account::where('user_created_id', Auth::user()->id)
-                                            ->where('status', "in progress")
-                                            ->Where(function($query) {
-                                                $query->where('account_name', 'LIKE', "%".$_GET['account_search']."%")
-                                                ->orWhere('country', 'LIKE', "%".$_GET['account_search']."%")
-                                                ->orWhere('account_login', 'LIKE', "%".$_GET['account_search']."%")
-                                                ->orWhere('account_pwd', 'LIKE', "%".$_GET['account_search']."%")
-                                                ->orWhere('ssh_port', 'LIKE', "%".$_GET['account_search']."%")
-                                                ->orWhere('ssh_ip', 'LIKE', "%".$_GET['account_search']."%")
-                                                ->orWhere('ssh_login', 'LIKE', "%".$_GET['account_search']."%")
-                                                ->orWhere('ssh_pwd', 'LIKE', "%".$_GET['account_search']."%")
-                                                ->orWhere('state', 'LIKE', "%".$_GET['account_search']."%")
-                                                ->orWhere('city', 'LIKE', "%".$_GET['account_search']."%")
-                                                ->orWhere('zip', 'LIKE', "%".$_GET['account_search']."%")
-                                                ->orWhere('comment', 'LIKE', "%".$_GET['account_search']."%");
-                                            })->paginate($paginate_row);
-        } else $auth_user_accounts = Account::where('user_created_id', Auth::user()->id)
-                                            ->where('status', "in progress")
-                                            ->paginate($paginate_row);
-
         return view('registrarAccounts', [
-            'users' => $users,
             'allStates' => $allStates,
-            'auth_user_accounts' => $auth_user_accounts,
-            'paginate_row' => $paginate_row,
-            'search_item_text' => $search_item_text,
         ]);
     }
 
@@ -106,8 +71,6 @@ class RegistrarController extends Controller
             $Acc_number++;
         } else $Acc_number = 1;
 
-        // dd(Auth::user()->initials);
-        // exit;
         
         $account_name = converter($short_country_code).'-'.Auth::user()->initials.'-'.$day.$month.'-'.$Acc_number.'/'.$data['account_type'];
 

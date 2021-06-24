@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\RegistrarController;
+use App\Http\livewire\RegistrarTable;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,13 +58,23 @@ Route::group(['middleware' => ['auth', 'role:superadmin']], function() {
 
 // for registrar
 Route::group(['middleware' => ['auth', 'role:registrar']], function() { 
+    Route::post('/dashboard/accountsList', [RegistrarController::class, 'addAccount'])->name('dashboard.accountsListPost');
     Route::get('/dashboard/accountsList', [RegistrarController::class, 'accountsList'])->name('dashboard.accountsList');
-    Route::post('/dashboard/accountsList', [RegistrarController::class, 'addAccount'])->name('dashboard.accountsListPost'); 
     Route::delete('/dashboard/accountsList/{id}', [RegistrarController::class, 'accountDestroy'])->name('dashboard.accountDestroy');
     Route::put('/dashboard/accountsList', [RegistrarController::class, 'numberOfRows'])->name('dashboard.numberOfRows');
     Route::put('/dashboard/accountsList/{id}', [RegistrarController::class, 'accountStatus'])->name('dashboard.accountStatus');
     Route::patch('/dashboard/accountsList/{id}', [RegistrarController::class, 'accountEdit'])->name('dashboard.accountEdit');
 });
+
+// for registrar livewire
+// Route::group(['middleware' => ['auth', 'role:registrar']], function() { 
+//     Route::get('/dashboard/accountsList', [RegistrarController::class, 'accountsList'])->name('dashboard.accountsList');
+//     Route::post('/dashboard/accountsList', [RegistrarController::class, 'addAccount'])->name('dashboard.accountsListPost');
+//     Route::delete('/dashboard/accountsList/{id}', [RegistrarController::class, 'accountDestroy'])->name('dashboard.accountDestroy');
+//     Route::put('/dashboard/accountsList', [RegistrarController::class, 'numberOfRows'])->name('dashboard.numberOfRows');
+//     Route::put('/dashboard/accountsList/{id}', [RegistrarController::class, 'accountStatus'])->name('dashboard.accountStatus');
+//     Route::patch('/dashboard/accountsList/{id}', [RegistrarController::class, 'accountEdit'])->name('dashboard.accountEdit');
+// });
 
 //auth route for both 
 Route::group(['middleware' => ['auth']], function() { 

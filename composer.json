@@ -17,6 +17,7 @@
         "laravel/slack-notification-channel": "^2.3",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.2",
+        "livewire/livewire": "^2.4",
         "santigarcor/laratrust": "^6.3",
         "spatie/laravel-activitylog": "^4.0",
         "spatie/laravel-backup": "^6.16"

@@ -21,7 +21,7 @@ class Accountoffer extends Model
 
     protected $fillable = [
         'status',
-        // 'account_id',
+        'sort',
         // 'offer_id',
         // 'account',
         // 'offer',

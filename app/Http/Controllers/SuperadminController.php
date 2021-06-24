@@ -24,29 +24,7 @@ class SuperadminController extends Controller
     }
     
     public function offersList() {
-        $Offers_for_pagination = Offer::first();
-        if($Offers_for_pagination) $paginate_row = $Offers_for_pagination->rows;
-        else $paginate_row = 5;
-
-        if(array_key_exists('offer_search', $_GET) && $_GET['offer_search'] == "") $search_item_text = "Search";
-        else if(array_key_exists('offer_search', $_GET)) $search_item_text = $_GET['offer_search'];
-        else $search_item_text = "Search";
-
-        if(array_key_exists('offer_search', $_GET) && $_GET['offer_search'] != "") {
-            $offers = Offer::where('key', 'LIKE', "%".$_GET['offer_search']."%")
-                            ->orWhere('adds_text', 'LIKE', "%".$_GET['offer_search']."%")
-                            ->orWhere('bid', 'LIKE', "%".$_GET['offer_search']."%")
-                            ->orWhere('status', 'LIKE', "%".$_GET['offer_search']."%")
-                            ->orWhere('comment', 'LIKE', "%".$_GET['offer_search']."%")
-                            ->paginate($paginate_row);
-        } else $offers = Offer::paginate($paginate_row);
-        
-        
-        return view('superadminOffers', [
-            'offers' => $offers,
-            'search_item_text' => $search_item_text,
-            'paginate_row' => $paginate_row,
-        ]);
+        return view('superadminOffers');
     }
 
     public function addOffer() {

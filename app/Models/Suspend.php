@@ -12,5 +12,6 @@ class Suspend extends Model
 
     protected $fillable = [
         'rows',
+        'sort',
     ];
 }
